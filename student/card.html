@@ -91,93 +91,112 @@
         </div>
     </div>
 
+    <div id="debug-info"
+        class="fixed bottom-0 left-0 bg-black text-white p-4 text-xs font-mono hidden w-full opacity-90 z-50"></div>
+
     <script type="module">
         import { supabase } from '../assets/js/supabase-client.js';
 
+        function log(msg) {
+            console.log(msg);
+            const d = document.getElementById('debug-info');
+            d.innerHTML += `<div>${msg}</div>`;
+        }
+
         async function init() {
-            // 1. Get Student ID from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const studentId = urlParams.get('id');
+            try {
+                // 1. Get Student ID
+                const urlParams = new URLSearchParams(window.location.search);
+                const studentId = urlParams.get('id');
 
-            if (!studentId) {
-                showError('Invalid Student ID');
-                return;
-            }
+                if (!studentId) {
+                    showError('No Student ID provided in URL');
+                    return;
+                }
 
-            // 2. Check Authentication (Hybrid)
-            let currentUser = null;
-            let isAdmin = false;
+                log(`Checking ID: ${studentId}`);
 
-            // A) Check LocalStorage (Parent Custom Auth)
-            const localSession = localStorage.getItem('school_user_custom');
-            if (localSession) {
-                try {
-                    const session = JSON.parse(localSession);
-                    if (session && session.user) {
-                        currentUser = session.user;
-                        currentUser.isCustom = true;
-                    }
-                } catch (e) { console.error('Session parse error', e); }
-            }
+                // 2. Resolve User
+                let currentUser = null;
+                let isAdmin = false;
 
-            // B) Check Supabase Auth (Admin) checks take precedence if logged in
-            if (!currentUser) {
-                const { data: { user } } = await supabase.auth.getUser();
-                if (user) {
-                    // Start checking role
-                    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+                // Check LocalStorage
+                const localSession = localStorage.getItem('school_user_custom');
+                if (localSession) {
+                    try {
+                        const s = JSON.parse(localSession);
+                        if (s && s.user) {
+                            currentUser = s.user;
+                            currentUser.isCustom = true;
+                            log(`Local User Found: ${currentUser.phone}`);
+                        }
+                    } catch (e) { log('Session corrupted'); }
+                }
+
+                // Check Supabase (Admin overrides)
+                // Only check if we suspect admin or no local user
+                const { data: { user: sbUser } } = await supabase.auth.getUser();
+                if (sbUser) {
+                    const { data: profile } = await supabase.from('profiles').select('role').eq('id', sbUser.id).single();
                     if (profile && profile.role === 'admin') {
-                        currentUser = user;
+                        currentUser = sbUser;
                         isAdmin = true;
+                        log('Admin Logged In');
                     }
                 }
-            }
 
-            if (!currentUser) {
-                // Determine current URL to redirect back to
-                const returnUrl = encodeURIComponent(window.location.href);
-                window.location.href = `../parent/login.html?redirect=${returnUrl}`;
-                return;
-            }
-
-            // 3. Fetch Student Data 
-            // Query for Custom Parent requests now
-            const { data: student, error } = await supabase
-                .from('students')
-                .select('*, parent_requests(id, full_name, phone_number)')
-                .eq('id', studentId)
-                .single();
-
-            if (error || !student) {
-                showError('Student not found or access denied.');
-                return;
-            }
-
-            // 4. Verification Logic
-            // If Admin: Allow
-            // If Parent: Check ID match
-            let isAllowed = false;
-
-            if (isAdmin) {
-                isAllowed = true;
-            } else if (currentUser.isCustom) {
-                // Check if the student belongs to this parent
-                // Note: student.parent_id is the foreign key to parent_requests.id
-                if (student.parent_id === currentUser.id) {
-                    isAllowed = true;
+                if (!currentUser) {
+                    log('No user. Redirecting...');
+                    // Redirect Logic
+                    const returnUrl = encodeURIComponent(window.location.href);
+                    window.location.replace(`../parent/login.html?redirect=${returnUrl}`);
+                    return;
                 }
+
+                // 3. Fetch Data
+                const { data: student, error } = await supabase
+                    .from('students')
+                    .select('*, parent_requests(id, full_name, phone_number)')
+                    .eq('id', studentId)
+                    .single();
+
+                if (error || !student) {
+                    showError('Student not found in database.');
+                    log(error ? error.message : 'NULL Data');
+                    return;
+                }
+
+                log(`Student Parent ID: ${student.parent_id}`);
+                log(`Current User ID: ${currentUser.id}`);
+
+                // 4. Verify Access
+                let isAllowed = false;
+                if (isAdmin) isAllowed = true;
+                else if (currentUser.isCustom && student.parent_id === currentUser.id) isAllowed = true;
+
+                if (!isAllowed) {
+                    showError('Access Denied: ID Mismatch');
+                    // Show debug automatically on error
+                    document.getElementById('debug-info').classList.remove('hidden');
+                    log(` EXPECTED: ${student.parent_id}`);
+                    log(` ACTUAL:   ${currentUser.id}`);
+                    return;
+                }
+
+                // 5. Success - Fetch Details
+                // Fetch Teacher & Performance
+                const { data: teacher } = await supabase.from('teachers').select('*').eq('grade', student.grade).single();
+                const { data: perf } = await supabase.from('performance').select('*').eq('student_id', studentId).order('created_at', { ascending: false });
+
+                render(student, teacher, perf);
+
+            } catch (err) {
+                console.error(err);
+                showError('System Error: ' + err.message);
             }
+        }
 
-            if (!isAllowed) {
-                showError('You are logged in, but this student does not belong to you.');
-                return;
-            }
-
-            // 5. Fetch Linked Teacher & Performance
-            const { data: teacher } = await supabase.from('teachers').select('*').eq('grade', student.grade).single();
-            const { data: performance } = await supabase.from('performance').select('*').eq('student_id', studentId).order('created_at', { ascending: false });
-
-            // 6. Render
+        function render(student, teacher, performance) {
             document.getElementById('loading').classList.add('hidden');
             document.getElementById('card-container').classList.remove('hidden');
 
@@ -188,46 +207,31 @@
             document.getElementById('parent-name').textContent = student.parent_requests?.full_name || 'N/A';
             document.getElementById('parent-contact').textContent = student.parent_requests?.phone_number || 'N/A';
 
-            // Render Teacher
-            const teaContainer = document.getElementById('teacher-info');
             if (teacher) {
-                teaContainer.innerHTML = `
-                    <div class="flex items-center bg-indigo-50 p-3 rounded-lg mt-4 border border-indigo-100">
-                        <img src="${teacher.photo_url || 'https://placehold.co/100'}" class="w-12 h-12 rounded-full object-cover mr-3 border-2 border-white">
-                        <div>
-                            <p class="text-xs text-indigo-500 uppercase font-bold">Class Teacher</p>
-                            <p class="text-gray-900 font-semibold text-sm">${teacher.name}</p>
-                        </div>
-                    </div>
-                `;
+                document.getElementById('teacher-info').innerHTML = `
+                   <div class="flex items-center bg-indigo-50 p-3 rounded-lg mt-4 border border-indigo-100">
+                        <img src="${teacher.photo_url || 'https://placehold.co/100'}" class="w-12 h-12 rounded-full object-cover mr-3">
+                        <div><p class="text-xs text-indigo-500 font-bold">Class Teacher</p><p class="font-semibold text-sm">${teacher.name}</p></div>
+                   </div>`;
             }
 
-            // Render Performance
-            const perfContainer = document.getElementById('perf-container');
             if (performance && performance.length > 0) {
-                const latest = performance[0]; // Show latest
-                perfContainer.innerHTML = `
+                const latest = performance[0];
+                document.getElementById('perf-container').innerHTML = `
                    <div class="mt-6 pt-6 border-t border-gray-100">
-                        <p class="text-xs text-gray-400 uppercase tracking-wide mb-3">Academic Performance (${latest.term})</p>
+                        <p class="text-xs text-gray-400 uppercase tracking-wide mb-3">Performance (${latest.term})</p>
                         <div class="grid grid-cols-2 gap-2">
-                             ${performance.slice(0, 4).map(p => `
-                                <div class="bg-gray-50 p-2 rounded text-center">
-                                    <p class="text-xs text-gray-500">${p.subject}</p>
-                                    <p class="font-bold text-gray-800">${p.score}</p>
-                                </div>
-                             `).join('')}
+                             ${performance.slice(0, 4).map(p => `<div class="bg-gray-50 p-2 rounded text-center"><p class="text-xs text-gray-500">${p.subject}</p><p class="font-bold">${p.score}</p></div>`).join('')}
                         </div>
-                        ${latest.feedback ? `<p class="mt-3 text-sm text-gray-600 italic">"${latest.feedback}"</p>` : ''}
-                   </div>
-                `;
+                   </div>`;
             }
-
         }
 
         function showError(msg) {
             document.getElementById('loading').classList.add('hidden');
-            document.getElementById('error-msg').classList.remove('hidden');
-            console.error(msg);
+            const errDiv = document.getElementById('error-msg');
+            errDiv.classList.remove('hidden');
+            errDiv.querySelector('h2').textContent = msg; // Show specific reason logic
         }
 
         init();
