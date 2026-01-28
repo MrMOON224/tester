@@ -74,14 +74,22 @@
                 const session = {
                     user: {
                         id: data.id,
-                        role: 'parent', // Kept generic
+                        role: 'parent',
                         full_name: data.full_name,
                         phone: data.phone_number
                     }
                 };
                 localStorage.setItem('school_user_custom', JSON.stringify(session));
 
-                window.location.href = '../index.html';
+                // Check for redirect param
+                const urlParams = new URLSearchParams(window.location.search);
+                const redirectUrl = urlParams.get('redirect');
+
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                } else {
+                    window.location.href = '../index.html';
+                }
 
             } catch (err) {
                 console.error(err);

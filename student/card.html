@@ -83,7 +83,8 @@
         <h2 class="text-xl font-bold text-gray-900">Access Denied</h2>
         <p class="text-gray-600 mt-2">You do not have permission to view this student card.</p>
         <div class="mt-4 space-x-2">
-            <a href="../parent/login.html"
+            <a href="#"
+                onclick="window.location.href='../parent/login.html?redirect='+encodeURIComponent(window.location.href); return false;"
                 class="inline-block text-indigo-600 hover:text-indigo-800 border px-3 py-1 rounded">Parent Login</a>
             <a href="../admin/index.html" class="inline-block text-gray-600 hover:text-gray-800 text-sm">Admin
                 Access</a>
@@ -133,7 +134,9 @@
             }
 
             if (!currentUser) {
-                window.location.href = '../parent/login.html';
+                // Determine current URL to redirect back to
+                const returnUrl = encodeURIComponent(window.location.href);
+                window.location.href = `../parent/login.html?redirect=${returnUrl}`;
                 return;
             }
 
