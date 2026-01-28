@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h1>Setting up Admin...</h1>
+    <div id="result"></div>
+    <script type="module">
+        import { supabase } from './assets/js/supabase-client.js';
+
+        async function create() {
+            const email = '09111111111@san.school';
+            const password = 'admin123';
+
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: 'System Admin',
+                        phone: '09111111111'
+                    }
+                }
+            });
+
+            if (error) {
+                document.getElementById('result').innerText = 'Error: ' + error.message;
+            } else {
+                document.getElementById('result').innerText = 'User created: ' + data.user.id;
+            }
+        }
+        create();
+    </script>
+</body>
+
+</html>

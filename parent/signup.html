@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Registration - San School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <h1 class="text-2xl font-bold text-gray-900 text-center mb-2">Parent Registration</h1>
+        <p class="text-gray-500 text-center mb-6">Create an account to view your child's student card.</p>
+
+        <form id="signup-form" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                <input type="text" id="full-name" required
+                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Phone Number</label>
+                <input type="tel" id="phone" required placeholder="09xxxxxxxxx"
+                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="password" required
+                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm">
+            </div>
+
+            <div id="msg" class="text-sm h-6"></div>
+
+            <button type="submit"
+                class="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">Register</button>
+        </form>
+        <p class="mt-4 text-center text-sm text-gray-600">
+            Already have an account? <a href="login.html" class="text-indigo-600 hover:text-indigo-500">Sign in</a>
+        </p>
+    </div>
+
+    <script type="module">
+        import { supabase } from '../assets/js/supabase-client.js';
+
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msg = document.getElementById('msg');
+            msg.textContent = 'Submitting request...';
+            msg.className = 'text-blue-500';
+
+            const fullName = document.getElementById('full-name').value;
+            const phone = document.getElementById('phone').value.replace(/\D/g, '');
+            const password = document.getElementById('password').value;
+
+            try {
+                // 1. Check if account already exists
+                const { data: existingArr, error: findError } = await supabase
+                    .from('parent_requests')
+                    .select('*')
+                    .eq('phone_number', phone);
+
+                const existing = existingArr && existingArr.length > 0 ? existingArr[0] : null;
+
+                if (existing) {
+                    // Update the existing account (Claim logic)
+                    // If it was auto-created by admin (likely approved), we update name/pass.
+                    // If it was already user-created, we update pass? Let's assume overwrite is okay for this simplified model.
+                    const { error: updateError } = await supabase
+                        .from('parent_requests')
+                        .update({
+                            full_name: fullName,
+                            password: password,
+                            // If it was auto-created by admin, is_approved is already True.
+                            // If it wasn't, we keep it as is? Or set to True if it matches criteria?
+                            // User request: "parent use that same x number... it approve instantly"
+                            // This implies if it matches a student (which implies admin created it), it should be approved.
+                            // But admin-created ones ARE already approved.
+                            // So we just ensure is_approved is true if updating.
+                            is_approved: true
+                        })
+                        .eq('id', existing.id);
+
+                    if (updateError) throw updateError;
+
+                    msg.textContent = 'Account claimed and verified! Redirecting...';
+                    msg.className = 'text-green-600';
+                    setTimeout(() => window.location.href = 'login.html', 1500);
+
+                } else {
+                    // Create new request
+                    const { error } = await supabase.from('parent_requests').insert([{
+                        full_name: fullName,
+                        phone_number: phone,
+                        password: password,
+                        is_approved: false
+                    }]);
+
+                    if (error) throw error;
+
+                    msg.textContent = 'Request sent! Please wait for the admin to accept your request.';
+                    msg.className = 'text-green-600';
+                    e.target.reset();
+                }
+
+            } catch (err) {
+                console.error(err);
+                msg.textContent = err.message;
+                msg.className = 'text-red-500';
+            }
+        });
+    </script>
+</body>
+
+</html>

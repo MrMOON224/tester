@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San School Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #3F3D56;
+        }
+
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #6C63FF;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #EAE6E1;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            color: #3F3D56;
+        }
+
+        @media (max-width: 768px) {
+            .hero-text {
+                font-size: 2.5rem;
+            }
+        }
+
+        .carousel-item {
+            display: none;
+        }
+
+        .carousel-item.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-gray-800">San School</h1>
+                </div>
+                <!-- Desktop Navigation -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#announcements-section"
+                            class="nav-link font-bold text-indigo-600 hover:text-indigo-800 px-3 py-2 rounded-md text-sm font-medium">Announcements</a>
+                        <a href="#about"
+                            class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">About
+                            Us</a>
+                        <a href="#campus"
+                            class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Campus</a>
+                        <a href="#tuition"
+                            class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Tuition</a>
+                        <a href="#values"
+                            class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Our
+                            Values</a>
+                        <a href="#contact"
+                            class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button id="mobile-menu-button" type="button"
+                        class="bg-indigo-50 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                        aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Navigation Menu -->
+            <div class="hidden md:hidden" id="mobile-menu">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                    <a href="#announcements-section"
+                        class="bg-indigo-100 text-indigo-700 block px-3 py-2 rounded-md text-base font-medium">Announcements</a>
+                    <a href="#about"
+                        class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">About
+                        Us</a>
+                    <a href="#campus"
+                        class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Campus</a>
+                    <a href="#tuition"
+                        class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Tuition</a>
+                    <a href="#values"
+                        class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Our
+                        Values</a>
+                    <a href="#contact"
+                        class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="py-20 md:py-32">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="hero-text text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+                    <span class="block">San Schoolမှ ကြိုဆိုပါတယ်</span>
+                    <span class="block text-indigo-600">Where Futures Begin</span>
+                </h2>
+                <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-500">
+                    A nurturing environment where students are inspired to learn, grow, and achieve their full
+                    potential.
+                </p>
+            </div>
+        </section>
+
+        <!-- ANNOUNCEMENTS SECTION -->
+        <section id="announcements-section" class="py-16 bg-gray-50 border-t border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h3 class="text-3xl font-bold section-title">Latest School Announcement</h3>
+                <p class="mt-4 text-lg text-gray-500 mb-8">
+                    See what's new. Click the post to view all announcements.
+                </p>
+                <div id="latest-announcement-container" class="w-full max-w-3xl mx-auto">
+                    <!-- Content will be injected here by the script -->
+                    <p id="loading-message" class="text-gray-500 p-12 card">
+                        <svg class="animate-spin h-5 w-5 mr-3 inline text-indigo-600" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        Loading latest announcement...
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h3 class="text-3xl font-bold section-title text-center mb-12">Upcoming Events & Activities</h3>
+                <div id="events-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="col-span-full py-12 text-center text-gray-400">Loading events...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Teachers Section -->
+        <section id="teachers" class="py-16 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h3 class="text-3xl font-bold section-title text-center mb-12">Meet Our Teachers</h3>
+                <div id="teachers-container" class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="col-span-full py-12 text-center text-gray-400">Loading teachers...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8">
+                <div class="md:w-1/2">
+                    <h3 class="text-3xl font-bold section-title">About Us ကျောင်းအကြောင်း</h3>
+                    <p class="mt-4 text-lg text-gray-500">
+                        We are proud to serve students from **Pre-school to Grade 6** on our single, beautiful campus.
+                        Our commitment is to provide a high-quality education in a safe and supportive community.
+                    </p>
+                    <ul class="mt-6 space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="text-xl mr-2">📍</span>
+                            <strong>Location:</strong> 57 14*13
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-xl mr-2">📞</span>
+                            <strong>Phone:</strong> 0943046690
+                        </li>
+                    </ul>
+                </div>
+                <!-- Image placeholder for the school with specific dimensions -->
+                <div class="md:w-1/2 mt-8 md:mt-0">
+                    <img src="https://placehold.co/800x600/6C63FF/FFFFFF?text=School+Photo"
+                        alt="A placeholder for a school photo" class="w-full h-auto rounded-lg shadow-lg">
+                </div>
+            </div>
+        </section>
+
+        <!-- Campus Section with photo slider -->
+        <section id="campus" class="py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h3 class="text-3xl font-bold section-title">Campus Tour</h3>
+                <p class="mt-4 text-lg text-gray-500">
+                    Explore our beautiful and modern campus through these photos.
+                </p>
+                <div class="mt-12 w-full max-w-xl mx-auto relative overflow-hidden rounded-xl shadow-lg aspect-square">
+                    <div id="carousel-container" class="w-full h-full">
+                        <!-- Placeholder images for the slider -->
+                        <img src="https://placehold.co/600x600/6C63FF/FFFFFF?text=Campus+Photo+1"
+                            class="carousel-item absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500 active"
+                            alt="Campus Photo 1">
+                        <img src="https://placehold.co/600x600/7671F1/FFFFFF?text=Campus+Photo+2"
+                            class="carousel-item absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500"
+                            alt="Campus Photo 2">
+                        <img src="https://placehold.co/600x600/625BD7/FFFFFF?text=Campus+Photo+3"
+                            class="carousel-item absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500"
+                            alt="Campus Photo 3">
+                    </div>
+                    <!-- Navigation buttons -->
+                    <button id="prevBtn"
+                        class="absolute top-1/2 left-4 -translate-y-1/2 bg-white/50 p-2 rounded-full text-gray-800 hover:bg-white transition-colors duration-200 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <button id="nextBtn"
+                        class="absolute top-1/2 right-4 -translate-y-1/2 bg-white/50 p-2 rounded-full text-gray-800 hover:bg-white transition-colors duration-200 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tuition Section with grade breakdown -->
+        <section id="tuition" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h3 class="text-3xl font-bold section-title">Tuition & Fees ကျောင်းစရိတ်</h3>
+                <p class="mt-4 text-lg text-gray-500">
+                    Our tuition is designed to be accessible, offering a great value for the quality of education we
+                    provide. Please see the breakdown by grade level below.
+                </p>
+                <div class="mt-12 overflow-x-auto">
+                    <table class="min-w-full bg-white rounded-lg shadow-lg">
+                        <thead>
+                            <tr class="bg-indigo-100 text-indigo-600">
+                                <th class="py-4 px-6 text-left font-semibold rounded-tl-lg">Grade Level</th>
+                                <th class="py-4 px-6 text-left font-semibold">Tuition</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-t border-gray-200">
+                                <td class="py-4 px-6">Pre-school</td>
+                                <td class="py-4 px-6 font-semibold">XXXX</td>
+                            </tr>
+                            <tr class="bg-gray-50 border-t border-gray-200">
+                                <td class="py-4 px-6">Grade 1</td>
+                                <td class="py-4 px-6 font-semibold">XXXX</td>
+                            </tr>
+                            <tr class="border-t border-gray-200">
+                                <td class="py-4 px-6">Grade 2</td>
+                                <td class="py-4 px-6 font-semibold">XXXX</td>
+                            </tr>
+                            <tr class="bg-gray-50 border-t border-gray-200">
+                                <td class="py-4 px-6">Grade 3</td>
+                                <td class="py-4 px-6 font-semibold">XXXX</td>
+                            </tr>
+                            <tr class="border-t border-gray-200">
+                                <td class="py-4 px-6">Grade 4</td>
+                                <td class="py-4 px-6 font-semibold">XXXX</td>
+                            </tr>
+                            <tr class="bg-gray-50 border-t border-gray-200">
+                                <td class="py-4 px-6">Grade 5</td>
+                                <td class="py-4 px-6 font-semibold">XXXX</td>
+                            </tr>
+                            <tr class="border-t border-gray-200">
+                                <td class="py-4 px-6">Grade 6</td>
+                                <td class="py-4 px-6 font-semibold">XXXX</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Values Section -->
+        <section id="values" class="py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h3 class="text-3xl font-bold section-title">Our Core Values</h3>
+                    <p class="mt-4 text-lg text-gray-500">
+                        Our school is built on a foundation of values that guide our community and inspire our students
+                        every day.
+                    </p>
+                </div>
+                <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                    <div class="card text-center">
+                        <div
+                            class="flex items-center justify-center h-16 w-16 mx-auto rounded-full bg-indigo-100 text-indigo-600">
+                            <span class="text-2xl">💡</span>
+                        </div>
+                        <h4 class="mt-6 text-xl font-semibold">Curiosity</h4>
+                        <p class="mt-4 text-gray-500">ကျွန်မတို့ကျောင်းမှာတော့ သမီးတို့၊ သားတို့ရဲ့ စူးစမ်းလိုစိတ်ကို
+                            အမြဲတမ်း အားပေးမြှင့်တင်ပေးပါတယ်။ ကလေးတွေ မေးခွန်းတွေ မေးတာ၊ အသစ်အဆန်းတွေကို ရှာဖွေတာနဲ့
+                            သင်ယူတာတွေကနေ တစ်သက်တာလုံးအတွက် အဖိုးတန်တဲ့ အသိပညာတွေနဲ့ အရည်အချင်းတွေကို
+                            ပိုင်ဆိုင်နိုင်ဖို့ ကူညီပေးနေတာပါ။</p>
+                    </div>
+                    <div class="card text-center">
+                        <div
+                            class="flex items-center justify-center h-16 w-16 mx-auto rounded-full bg-indigo-100 text-indigo-600">
+                            <span class="text-2xl">🤝</span>
+                        </div>
+                        <h4 class="mt-6 text-xl font-semibold">Community</h4>
+                        <p class="mt-4 text-gray-500">ပူးပေါင်းဆောင်ရွက်မှုဆိုတာ ကျွန်မတို့ကျောင်းရဲ့ အဓိက
+                            အုတ်မြစ်တစ်ခုပါပဲ။ တစ်ယောက်နဲ့တစ်ယောက် အပြန်အလှန်လေးစားပြီး အားပေးကူညီတတ်တဲ့
+                            ချစ်စရာကောင်းတဲ့ မိသားစုလေးလို ပတ်ဝန်းကျင်မျိုးကို ဖန်တီးပေးထားပါတယ်။ ကျောင်းသားတိုင်းက
+                            ဒီမိသားစုရဲ့ အဖိုးတန်တဲ့ အစိတ်အပိုင်းလေးတွေဆိုတာ ခံစားရပါစေချင်ပါတယ်။</p>
+                    </div>
+                    <div class="card text-center">
+                        <div
+                            class="flex items-center justify-center h-16 w-16 mx-auto rounded-full bg-indigo-100 text-indigo-600">
+                            <span class="text-2xl">🌱</span>
+                        </div>
+                        <h4 class="mt-6 text-xl font-semibold">Growth</h4>
+                        <p class="mt-4 text-gray-500">ကလေးတိုင်းမှာ ကြီးထွားပြောင်းလဲလိုစိတ် ရှိနေဖို့
+                            အရမ်းအရေးကြီးပါတယ်။ စိန်ခေါ်မှုတွေကြုံလာတဲ့အခါ ရင်ဆိုင်ကျော်လွှားတတ်ဖို့ ကူညီပေးပြီး
+                            ကလေးတွေရဲ့ ခြေလှမ်းတိုင်း၊ တိုးတက်မှုတိုင်းကို အတူတူ ဝမ်းသာဂုဏ်ယူပေးပါတယ်။ ဒါမှသာ သူတို့ရဲ့
+                            အနာဂတ်အတွက် ခိုင်မာတဲ့ လမ်းကြောင်းတစ်ခုကို ဖောက်လုပ်ပေးနိုင်မှာပါ။</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h3 class="text-3xl font-bold section-title">Contact Us ဆက်သွယ်ရန်</h3>
+                <p class="mt-4 text-lg text-gray-500">
+                    Have questions? We're here to help. Get in touch with us to learn more about our school.
+                </p>
+                <div class="mt-8">
+                    <p class="text-xl font-semibold text-gray-700">Phone: 0943046690</p>
+                    <p class="text-xl font-semibold text-gray-700">Location: 57 14*13</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center text-gray-400 text-sm">
+            <p>&copy; 2025 San School. All rights reserved.</p>
+            <a href="admin.html"
+                class="text-xs text-gray-500 hover:text-indigo-400 transition-colors duration-200 block mt-2">(Admin
+                Portal)</a>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK Imports for Dynamic Content -->
+    <script type="module">
+        import { supabase } from './assets/js/supabase-client.js';
+
+        // Utility for formatting timestamps
+        const formatTimestamp = (timestamp) => {
+            if (!timestamp) return 'Just Now';
+            const date = new Date(timestamp);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        };
+
+        // Function to render the latest announcement post
+        const renderLatestPost = (post) => {
+            const container = document.getElementById('latest-announcement-container');
+            if (!container) return;
+
+            if (!post) {
+                container.innerHTML = `
+                    <p class="card p-8 text-gray-500">No announcements have been posted yet. Check back soon!</p>
+                `;
+                return;
+            }
+
+            const contentSnippet = post.content.substring(0, 150) + (post.content.length > 150 ? '...' : '');
+            const formattedDate = formatTimestamp(post.created_at);
+
+            container.innerHTML = `
+                <a href="announcements.html" class="card block text-left hover:scale-[1.01] transition-transform duration-300 cursor-pointer">
+                    ${post.image_url ?
+                    `<img src="${post.image_url}" alt="${post.title}" class="w-full h-48 object-cover rounded-t-lg mb-4" 
+                              onerror="this.onerror=null;this.src='https://placehold.co/600x200/F1F1F1/3F3D56?text=Image+Not+Available';"
+                        >` : ''}
+                    <h4 class="text-2xl font-bold text-gray-900 mb-2">${post.title}</h4>
+                    <p class="text-sm text-indigo-600 mb-4 font-medium">Posted: ${formattedDate}</p>
+                    <p class="text-gray-600">${contentSnippet}</p>
+                    <span class="mt-4 block text-indigo-600 font-semibold hover:text-indigo-800">Read All Announcements →</span>
+                </a>
+            `;
+        };
+
+        // Fetch latest announcement from Supabase
+        const fetchLatestAnnouncement = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('announcements')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .single();
+
+                if (error && error.code !== 'PGRST116') { // PGRST116 is "No rows found"
+                    console.error('Error fetching announcement:', error);
+                    document.getElementById('latest-announcement-container').innerHTML = `
+                        <p class="card p-8 text-red-600">Failed to load announcements.</p>
+                    `;
+                    return;
+                }
+
+                renderLatestPost(data);
+
+                // Optional: Subscribe to realtime updates
+                supabase
+                    .channel('public:announcements')
+                    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'announcements' }, payload => {
+                        renderLatestPost(payload.new);
+                    })
+                    .subscribe();
+
+            } catch (err) {
+                console.error('Unexpected error:', err);
+            }
+        };
+
+        // Fetch and Render Events
+        async function fetchEvents() {
+            const { data } = await supabase.from('events').select('*').order('event_date', { ascending: true }).limit(3);
+            const container = document.getElementById('events-container');
+            if (data && data.length > 0) {
+                container.innerHTML = data.map(evt => `
+                    <div class="bg-white border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
+                        ${evt.image_url ? `<img src="${evt.image_url}" class="w-full h-48 object-cover">` : ''}
+                        <div class="p-6">
+                            <h4 class="text-xl font-bold mb-1">${evt.title}</h4>
+                            <p class="text-sm text-indigo-600 mb-3 font-medium">
+                                ${new Date(evt.event_date).toLocaleDateString()} @ ${evt.location || 'Campus'}
+                            </p>
+                            <p class="text-gray-600 text-sm line-clamp-3">${evt.description || ''}</p>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<p class="text-center text-gray-500 col-span-full py-8">No upcoming events scheduled.</p>';
+            }
+        }
+
+        // Fetch and Render Teachers
+        async function fetchTeachers() {
+            const { data } = await supabase.from('teachers').select('*');
+            const container = document.getElementById('teachers-container');
+            if (data && data.length > 0) {
+                container.innerHTML = data.map(t => `
+                    <div class="text-center group">
+                        <div class="relative w-32 h-32 mx-auto mb-4">
+                            <img src="${t.photo_url || 'https://placehold.co/150'}" class="w-full h-full rounded-full object-cover shadow-lg border-4 border-white group-hover:border-indigo-100 transition">
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900">${t.name}</h4>
+                        <p class="text-indigo-600 text-sm font-semibold uppercase tracking-wide">${t.grade}</p>
+                        <p class="text-gray-500 text-xs mt-2 italic px-4 line-clamp-2">${t.bio || ''}</p>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<p class="text-center text-gray-500 col-span-full">Faculty list updating...</p>';
+            }
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchEvents();
+            fetchTeachers();
+            // Main site JavaScript (mobile menu, carousel, intersection observer)
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', () => {
+                    const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+                    mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenuButton.querySelector('svg:first-child').classList.toggle('hidden');
+                    // Toggle the second svg (close icon) if it exists, roughly checking logic
+                    const closeIcon = mobileMenuButton.querySelector('svg:last-child');
+                    if (closeIcon) closeIcon.classList.toggle('hidden');
+                });
+            }
+
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuButton.setAttribute('aria-expanded', 'false');
+                    mobileMenuButton.querySelector('svg:first-child').classList.remove('hidden');
+                    const closeIcon = mobileMenuButton.querySelector('svg:last-child');
+                    if (closeIcon) closeIcon.classList.add('hidden');
+                });
+            });
+
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.4 };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            if (!link.href.includes('announcements.html')) {
+                                link.classList.remove('active');
+                                if (link.getAttribute('href')?.substring(1) === entry.target.id) {
+                                    link.classList.add('active');
+                                }
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => { observer.observe(section); });
+
+            // Campus Carousel Logic 
+            const slides = document.querySelectorAll('.carousel-item');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            let currentSlide = 0;
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active');
+                    if (i === index) {
+                        slide.classList.add('active');
+                    }
+                });
+            }
+
+            if (slides.length > 0) {
+                if (nextBtn) nextBtn.addEventListener('click', () => {
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    showSlide(currentSlide);
+                });
+
+                if (prevBtn) prevBtn.addEventListener('click', () => {
+                    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                    showSlide(currentSlide);
+                });
+            }
+
+            fetchLatestAnnouncement();
+        });
+    </script>
+</body>
+
+</html>

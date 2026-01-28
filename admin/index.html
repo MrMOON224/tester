@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - San School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Admin Portal</h1>
+            <p class="text-gray-500">San School Management System</p>
+        </div>
+
+        <form id="login-form" class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input type="email" id="email" name="email" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="password" name="password" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div id="error-message" class="text-red-500 text-sm h-6"></div>
+
+            <button type="submit"
+                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                Sign In
+            </button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { supabase } from '../assets/js/supabase-client.js';
+
+        const form = document.getElementById('login-form');
+        const errorMsg = document.getElementById('error-message');
+
+        // Check if already logged in
+        async function checkAuth() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                // Check if admin
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('id', user.id)
+                    .single();
+
+                if (profile && profile.role === 'admin') {
+                    window.location.href = 'dashboard.html';
+                } else {
+                    await supabase.auth.signOut();
+                    errorMsg.textContent = 'Unauthorized access.';
+                }
+            }
+        }
+        checkAuth();
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorMsg.textContent = '';
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+
+                if (error) throw error;
+
+                // Check role
+                const { data: profile, error: profileError } = await supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('id', data.user.id)
+                    .single();
+
+                if (profileError || !profile || profile.role !== 'admin') {
+                    await supabase.auth.signOut();
+                    throw new Error('Access denied. Admin only.');
+                }
+
+                window.location.href = 'dashboard.html';
+
+            } catch (error) {
+                console.error(error);
+                errorMsg.textContent = error.message || 'Login failed.';
+            }
+        });
+    </script>
+</body>
+
+</html>

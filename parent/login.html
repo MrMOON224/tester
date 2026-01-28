@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Login - San School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <h1 class="text-2xl font-bold text-gray-900 text-center mb-8">Parent Login</h1>
+
+        <form id="login-form" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Phone Number</label>
+                <input type="tel" id="phone" required placeholder="09xxxxxxxxx"
+                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="password" required
+                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm">
+            </div>
+
+            <div id="msg" class="text-sm h-6 text-red-500"></div>
+
+            <button type="submit"
+                class="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">Sign
+                In</button>
+        </form>
+        <p class="mt-4 text-center text-sm text-gray-600">
+            Don't have an account? <a href="signup.html" class="text-indigo-600 hover:text-indigo-500">Register</a>
+        </p>
+    </div>
+
+    <script type="module">
+        import { supabase } from '../assets/js/supabase-client.js';
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msg = document.getElementById('msg');
+            msg.textContent = 'Logging in...';
+
+            const phone = document.getElementById('phone').value.replace(/\D/g, '');
+            const password = document.getElementById('password').value;
+
+            try {
+                // Custom Login Check (Table Query)
+                const { data, error } = await supabase
+                    .from('parent_requests')
+                    .select('*')
+                    .eq('phone_number', phone)
+                    .eq('password', password)
+                    .single();
+
+                if (error || !data) {
+                    throw new Error('Invalid phone number or password.');
+                }
+
+                if (!data.is_approved) {
+                    throw new Error('Your account is waiting for admin approval.');
+                }
+
+                // Success - Set Session in LocalStorage
+                const session = {
+                    user: {
+                        id: data.id,
+                        role: 'parent', // Kept generic
+                        full_name: data.full_name,
+                        phone: data.phone_number
+                    }
+                };
+                localStorage.setItem('school_user_custom', JSON.stringify(session));
+
+                window.location.href = '../index.html';
+
+            } catch (err) {
+                console.error(err);
+                msg.textContent = err.message || 'Login failed.';
+            }
+        });
+    </script>
+</body>
+
+</html>
