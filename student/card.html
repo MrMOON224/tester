@@ -4,13 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Identity Card - San School</title>
+    <title>Student Identity Card - School</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        school: { navy: '#0F172A', gold: '#D4AF37', cream: '#F9FAFB', blue: '#1E40AF' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Merriweather', 'serif'] }
+                }
+            }
+        }
+    </script>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F3F4F6;
+            background-color: #F9FAFB;
+        }
+
+        .pattern-bg {
+            background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
+            background-color: #0F172A;
         }
     </style>
 </head>
@@ -20,74 +39,113 @@
     <div id="loading" class="text-center text-gray-500 font-medium">Verifying Access...</div>
     <div id="debug-msg" class="text-xs text-gray-400 fixed top-0 left-0 p-2 hidden"></div>
 
-    <div id="card-container"
-        class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-sm w-full hidden transform transition-all duration-500 hover:scale-105">
-        <!-- Header / Banner -->
-        <div class="h-32 bg-gradient-to-r from-indigo-500 to-purple-600 relative">
-            <div class="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
-                <div class="w-32 h-32 rounded-full border-4 border-white overflow-hidden bg-gray-200">
-                    <img id="stu-photo" src="https://placehold.co/150x150?text=Student" alt="Student Photo"
-                        class="w-full h-full object-cover">
-                </div>
-            </div>
+    <div id="card-container" class="hidden max-w-md w-full mx-auto relative group">
+        <!-- Print / Action Bar (Hidden in Print) -->
+        <div
+            class="absolute -top-12 right-0 flex max-w-md w-full justify-end space-x-2 print:hidden opacity-0 group-hover:opacity-100 transition duration-300">
+            <button onclick="window.print()"
+                class="text-xs font-bold text-slate-400 hover:text-school-navy uppercase tracking-widest"><i
+                    class="fas fa-print mr-1"></i> Print</button>
         </div>
 
-        <div class="pt-20 pb-8 px-6 text-center">
-            <h1 class="text-2xl font-bold text-gray-900" id="stu-name">Student Name</h1>
-            <p class="text-indigo-600 font-medium mt-1" id="stu-grade">Grade</p>
-
-            <div class="mt-8 space-y-4 text-left">
-                <div class="flex items-center bg-gray-50 p-3 rounded-lg">
-                    <span class="text-2xl mr-3">🏫</span>
-                    <div>
-                        <p class="text-xs text-gray-500 uppercase font-semibold">School</p>
-                        <p class="text-gray-800 font-medium">San School</p>
-                    </div>
+        <div class="bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-100">
+            <!-- Minimal Header -->
+            <div class="pattern-bg h-24 relative flex items-center justify-center">
+                <div class="text-center">
+                    <div
+                        class="w-8 h-8 bg-school-gold text-school-navy flex items-center justify-center rounded mx-auto font-serif font-bold text-lg mb-1">
+                        S</div>
+                    <h1 class="text-white font-serif font-bold tracking-wide text-sm">SCHOOL</h1>
                 </div>
-
-                <div class="flex items-center bg-gray-50 p-3 rounded-lg">
-                    <span class="text-2xl mr-3">👨‍👩‍👧</span>
-                    <div>
-                        <p class="text-xs text-gray-500 uppercase font-semibold">Parent / Guardian</p>
-                        <p class="text-gray-800 font-medium" id="parent-name">Parent Name</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center bg-gray-50 p-3 rounded-lg">
-                    <span class="text-2xl mr-3">📞</span>
-                    <div>
-                        <p class="text-xs text-gray-500 uppercase font-semibold">Emergency Contact</p>
-                        <p class="text-gray-800 font-medium" id="parent-contact">Phone</p>
-                    </div>
-                </div>
-
-                <!-- Dynamic Teacher Info -->
-                <div id="teacher-info"></div>
-
-                <!-- Dynamic Performance Info -->
-                <div id="perf-container"></div>
             </div>
 
-            <div class="mt-8 pt-6 border-t border-gray-100">
-                <p class="text-xs text-gray-400">Verified Student Identity</p>
-                <div
-                    class="mt-2 inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold uppercase tracking-wide">
-                    Active Student
+            <!-- Profile Section -->
+            <div class="px-8 pb-8 -mt-12 text-center relative z-10">
+                <div class="inline-block relative">
+                    <div class="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden bg-white">
+                        <img id="stu-photo" src="https://placehold.co/150x150?text=Student" alt="Student Photo"
+                            class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-emerald-500 border-2 border-white w-5 h-5 rounded-full"
+                        title="Active"></div>
                 </div>
+
+                <div class="mt-4">
+                    <h2 class="text-2xl font-bold text-school-navy font-serif" id="stu-name">Student Name</h2>
+                    <p class="text-school-gold font-medium text-sm tracking-widest uppercase mt-1" id="stu-grade">Grade
+                    </p>
+                </div>
+
+                <!-- Verified Badge -->
+                <div class="mt-6 flex justify-center">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-slate-50 border border-slate-100">
+                        <i class="fas fa-check-circle text-emerald-500 mr-2 text-xs"></i>
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Verified ID</span>
+                    </div>
+                </div>
+
+                <!-- Info Grid -->
+                <div class="mt-8 grid gap-4 text-left">
+                    <!-- Parent -->
+                    <div
+                        class="flex items-center p-3 rounded-lg hover:bg-slate-50 transition border border-transparent hover:border-slate-100">
+                        <div
+                            class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 mr-4">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Guardian</p>
+                            <p class="text-slate-700 font-medium text-sm" id="parent-name">Parent Name</p>
+                        </div>
+                    </div>
+
+                    <!-- Contact -->
+                    <div
+                        class="flex items-center p-3 rounded-lg hover:bg-slate-50 transition border border-transparent hover:border-slate-100">
+                        <div
+                            class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 mr-4">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Emergency</p>
+                            <p class="text-slate-700 font-medium text-sm font-mono" id="parent-contact">Phone</p>
+                        </div>
+                    </div>
+
+                    <!-- Teacher (Dynamic) -->
+                    <div id="teacher-info"></div>
+                </div>
+
+                <!-- Performance (Dynamic) -->
+                <div id="perf-container" class="mt-6"></div>
+
+            </div>
+
+            <!-- Minimal Footer -->
+            <div class="bg-slate-50 px-8 py-4 border-t border-slate-100 flex justify-between items-center">
+                <p class="text-[10px] text-slate-400 uppercase tracking-widest">Academic Year 2026</p>
+                <img src="https://placehold.co/40x40?text=QR" class="w-8 h-8 opacity-20 hidden md:block">
+                <!-- Decorative -->
             </div>
         </div>
     </div>
 
-    <div id="error-msg" class="hidden text-center bg-white p-8 rounded-lg shadow-lg">
-        <div class="text-red-500 text-5xl mb-4">🚫</div>
-        <h2 class="text-xl font-bold text-gray-900">Access Denied</h2>
-        <p class="text-gray-600 mt-2">You do not have permission to view this student card.</p>
-        <div class="mt-4 space-x-2">
+    <div id="error-msg" class="hidden max-w-md w-full mx-auto text-center bg-white p-12 rounded-xl shadow-2xl">
+        <div
+            class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+            <i class="fas fa-lock"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-school-navy font-serif mb-2">Access Restricted</h2>
+        <p class="text-slate-500 mb-8">This student card is private. Please verify your identity to view.</p>
+
+        <div class="space-y-3">
             <a href="#"
                 onclick="window.location.href='../parent/login.html?redirect='+encodeURIComponent(window.location.href); return false;"
-                class="inline-block text-indigo-600 hover:text-indigo-800 border px-3 py-1 rounded">Parent Login</a>
-            <a href="../admin/index.html" class="inline-block text-gray-600 hover:text-gray-800 text-sm">Admin
-                Access</a>
+                class="block w-full py-3 bg-school-navy text-white rounded-lg font-medium hover:bg-slate-800 transition shadow-lg shadow-slate-900/20">
+                Parent Login
+            </a>
+            <a href="../admin/index.html"
+                class="block w-full py-3 text-slate-500 hover:text-slate-700 text-sm font-medium">Admin Access</a>
         </div>
     </div>
 
@@ -209,19 +267,28 @@
 
             if (teacher) {
                 document.getElementById('teacher-info').innerHTML = `
-                   <div class="flex items-center bg-indigo-50 p-3 rounded-lg mt-4 border border-indigo-100">
-                        <img src="${teacher.photo_url || 'https://placehold.co/100'}" class="w-12 h-12 rounded-full object-cover mr-3">
-                        <div><p class="text-xs text-indigo-500 font-bold">Class Teacher</p><p class="font-semibold text-sm">${teacher.name}</p></div>
+                   <div class="flex items-center p-3 rounded-lg hover:bg-slate-50 transition border border-transparent hover:border-slate-100">
+                        <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600 mr-4 overflow-hidden">
+                             ${teacher.photo_url ? `<img src="${teacher.photo_url}" class="w-full h-full object-cover">` : `<i class="fas fa-chalkboard-teacher"></i>`}
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Class Teacher</p>
+                            <p class="text-slate-700 font-medium text-sm">${teacher.name}</p>
+                        </div>
                    </div>`;
             }
 
             if (performance && performance.length > 0) {
                 const latest = performance[0];
                 document.getElementById('perf-container').innerHTML = `
-                   <div class="mt-6 pt-6 border-t border-gray-100">
-                        <p class="text-xs text-gray-400 uppercase tracking-wide mb-3">Performance (${latest.term})</p>
-                        <div class="grid grid-cols-2 gap-2">
-                             ${performance.slice(0, 4).map(p => `<div class="bg-gray-50 p-2 rounded text-center"><p class="text-xs text-gray-500">${p.subject}</p><p class="font-bold">${p.score}</p></div>`).join('')}
+                   <div class="mt-4 pt-4 border-t border-dashed border-slate-200">
+                        <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-3">Latest Performance (${latest.term})</p>
+                        <div class="grid grid-cols-2 gap-3">
+                             ${performance.slice(0, 4).map(p => `
+                                <div class="bg-slate-50 p-2 rounded text-center border border-slate-100">
+                                    <p class="text-[10px] text-slate-500 uppercase">${p.subject}</p>
+                                    <p class="font-bold text-school-navy">${p.score}</p>
+                                </div>`).join('')}
                         </div>
                    </div>`;
             }

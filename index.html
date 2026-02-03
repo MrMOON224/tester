@@ -4,592 +4,500 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>San School Website</title>
+    <title>School - Excellence in Education</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #FDFBF8;
-            color: #3F3D56;
-        }
-
-        .nav-link {
-            transition: all 0.3s ease;
-            position: relative;
-            padding-bottom: 4px;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #6C63FF;
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            width: 100%;
-        }
-
-        .card {
-            background-color: #FFFFFF;
-            border: 1px solid #EAE6E1;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        .section-title {
-            color: #3F3D56;
-        }
-
-        @media (max-width: 768px) {
-            .hero-text {
-                font-size: 2.5rem;
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Fonts: Merriweather (Serif for Prestige) & Inter (Clean Sans for Readability) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        school: {
+                            navy: '#0F172A',
+                            gold: '#D4AF37',
+                            cream: '#F9FAFB',
+                            blue: '#1E40AF'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    }
+                }
             }
         }
+    </script>
+    <style>
+        .hero-pattern {
+            background-color: #0F172A;
+            background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
+        }
 
-        .carousel-item {
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Teacher Org Chart Lines */
+        .org-connector {
+            position: absolute;
+            top: -2rem;
+            left: 50%;
+            width: 2px;
+            height: 2rem;
+            background-color: #CBD5E1;
             display: none;
         }
 
-        .carousel-item.active {
-            display: block;
+        @media(min-width: 768px) {
+            .org-connector {
+                display: block;
+            }
         }
     </style>
 </head>
 
-<body>
+<body class="bg-school-cream text-slate-800 antialiased">
 
-    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
-        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0">
-                    <h1 class="text-xl font-bold text-gray-800">San School</h1>
-                </div>
-                <!-- Desktop Navigation -->
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#announcements-section"
-                            class="nav-link font-bold text-indigo-600 hover:text-indigo-800 px-3 py-2 rounded-md text-sm font-medium">Announcements</a>
-                        <a href="#about"
-                            class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">About
-                            Us</a>
-                        <a href="#campus"
-                            class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Campus</a>
-                        <a href="#tuition"
-                            class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Tuition</a>
-                        <a href="#values"
-                            class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Our
-                            Values</a>
-                        <a href="#contact"
-                            class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 bg-school-navy text-school-gold flex items-center justify-center rounded-lg font-serif font-bold text-2xl">
+                        S</div>
+                    <div>
+                        <h1 class="text-xl font-bold text-school-navy font-serif leading-none">School</h1>
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest">Est. 2026</p>
                     </div>
                 </div>
-                <!-- Mobile menu button -->
-                <div class="-mr-2 flex md:hidden">
-                    <button id="mobile-menu-button" type="button"
-                        class="bg-indigo-50 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
-                        aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
+                    <a href="#home" class="hover:text-school-blue transition">Home</a>
+                    <a href="#about" class="hover:text-school-blue transition">About</a>
+                    <a href="#campus" class="hover:text-school-blue transition">Campus</a>
+                    <a href="#tuition" class="hover:text-school-blue transition">Admissions</a>
+                    <a href="#announcements" class="hover:text-school-blue transition">News</a>
                 </div>
-            </div>
-            <!-- Mobile Navigation Menu -->
-            <div class="hidden md:hidden" id="mobile-menu">
-                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                    <a href="#announcements-section"
-                        class="bg-indigo-100 text-indigo-700 block px-3 py-2 rounded-md text-base font-medium">Announcements</a>
-                    <a href="#about"
-                        class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">About
-                        Us</a>
-                    <a href="#campus"
-                        class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Campus</a>
-                    <a href="#tuition"
-                        class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Tuition</a>
-                    <a href="#values"
-                        class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Our
-                        Values</a>
+
+                <!-- CTA -->
+                <div class="hidden md:block">
                     <a href="#contact"
-                        class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+                        class="bg-school-navy text-white px-5 py-2.5 rounded hover:bg-slate-800 transition text-sm font-semibold">Contact
+                        Us</a>
                 </div>
+
+                <!-- Mobile Menu Details -->
+                <button id="mobile-btn" class="md:hidden text-slate-800"><i class="fas fa-bars text-xl"></i></button>
             </div>
-        </nav>
+        </div>
+        <!-- Mobile Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t p-4 space-y-3 shadow-lg">
+            <a href="#home" class="block font-semibold text-school-navy">Home</a>
+            <a href="#campus" class="block font-medium text-slate-600">Campus</a>
+            <a href="#contact" class="block font-bold text-school-blue">Contact Us</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero-pattern text-white py-24 md:py-32 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
+            <h1 class="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight">
+                Schoolမှ ကြိုဆိုပါတယ် <br>
+                <span class="text-school-gold">Where Futures Begin</span>
+            </h1>
+            <p class="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light">
+                A nurturing environment where students are inspired to learn, grow, and achieve their full potential.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#about"
+                    class="bg-school-gold text-school-navy px-8 py-3 rounded font-bold hover:bg-yellow-500 transition">Learn
+                    More</a>
+                <a href="#contact"
+                    class="border border-slate-500 px-8 py-3 rounded font-bold hover:bg-white/10 transition">Visit
+                    Us</a>
+            </div>
+        </div>
     </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section id="hero" class="py-20 md:py-32">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="hero-text text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
-                    <span class="block">San Schoolမှ ကြိုဆိုပါတယ်</span>
-                    <span class="block text-indigo-600">Where Futures Begin</span>
-                </h2>
-                <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-500">
-                    A nurturing environment where students are inspired to learn, grow, and achieve their full
-                    potential.
-                </p>
+    <!-- Announcement Tablet Section (Restored) -->
+    <section id="announcements-section" class="py-16 bg-white border-b border-slate-100 relative">
+        <div class="max-w-4xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-8">
+                <h3 class="text-2xl font-serif font-bold text-school-navy">Latest Announcement</h3>
+                <p class="text-slate-500 text-sm">Updates from the administration</p>
             </div>
-        </section>
 
-        <!-- ANNOUNCEMENTS SECTION -->
-        <section id="announcements-section" class="py-16 bg-gray-50 border-t border-b border-gray-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h3 class="text-3xl font-bold section-title">Latest School Announcement</h3>
-                <p class="mt-4 text-lg text-gray-500 mb-8">
-                    See what's new. Click the post to view all announcements.
+            <div id="latest-announcement-container"
+                class="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden transform hover:-translate-y-1 transition duration-500">
+                <div class="p-12 text-center text-slate-400 italic">Reading latest updates...</div>
+            </div>
+        </div>
+        <!-- Decorative background elements -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+            <div class="absolute -top-24 -left-24 w-64 h-64 bg-school-blue/5 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-school-gold/10 rounded-full blur-3xl"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-3xl font-serif font-bold text-school-navy mb-6">About Our School <span
+                        class="block text-lg font-sans font-normal text-slate-500 mt-2">ကျောင်းအကြောင်း</span></h2>
+                <p class="text-slate-600 mb-6 leading-relaxed">
+                    We are proud to serve students from <strong class="text-school-navy">Pre-school to Grade 6</strong>
+                    on our single, beautiful campus.
+                    Our commitment is to provide a high-quality education in a safe and supportive community where every
+                    child is known and valued.
                 </p>
-                <div id="latest-announcement-container" class="w-full max-w-3xl mx-auto">
-                    <!-- Content will be injected here by the script -->
-                    <p id="loading-message" class="text-gray-500 p-12 card">
-                        <svg class="animate-spin h-5 w-5 mr-3 inline text-indigo-600" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                            </circle>
-                            <path class="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
-                        Loading latest announcement...
+
+                <div class="grid grid-cols-2 gap-6 mt-8">
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-school-blue">
+                        <p class="text-xs font-bold text-slate-400 uppercase">Location</p>
+                        <p class="font-semibold text-slate-800">57 14*13, Mandalay</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-school-gold">
+                        <p class="text-xs font-bold text-slate-400 uppercase">Contact</p>
+                        <p class="font-semibold text-slate-800">0943046690</p>
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="absolute inset-0 bg-school-navy/5 transform translate-x-4 translate-y-4 rounded-xl"></div>
+                <img src="https://placehold.co/800x600/1e293b/FFF?text=School+Campus"
+                    class="relative rounded-xl shadow-lg w-full">
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section (Restored Text) -->
+    <section class="py-20 bg-slate-50 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-serif font-bold text-school-navy">Our Core Values</h2>
+                <div class="w-16 h-1 bg-school-gold mx-auto mt-4"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Curiosity -->
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100 card-hover">
+                    <div
+                        class="w-12 h-12 bg-blue-50 text-school-blue rounded-lg flex items-center justify-center text-xl mb-6">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4">Curiosity</h3>
+                    <p class="text-slate-600 text-sm leading-7">
+                        ကျွန်မတို့ကျောင်းမှာတော့ သမီးတို့၊ သားတို့ရဲ့ စူးစမ်းလိုစိတ်ကို အမြဲတမ်း
+                        အားပေးမြှင့်တင်ပေးပါတယ်။ ကလေးတွေ မေးခွန်းတွေ မေးတာ၊ အသစ်အဆန်းတွေကို ရှာဖွေတာနဲ့ သင်ယူတာတွေကနေ
+                        တစ်သက်တာလုံးအတွက် အဖိုးတန်တဲ့ အသိပညာတွေနဲ့ အရည်အချင်းတွေကို ပိုင်ဆိုင်နိုင်ဖို့ ကူညီပေးနေတာပါ။
+                    </p>
+                </div>
+
+                <!-- Community -->
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100 card-hover">
+                    <div
+                        class="w-12 h-12 bg-yellow-50 text-school-gold rounded-lg flex items-center justify-center text-xl mb-6">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4">Community</h3>
+                    <p class="text-slate-600 text-sm leading-7">
+                        ပူးပေါင်းဆောင်ရွက်မှုဆိုတာ ကျွန်မတို့ကျောင်းရဲ့ အဓိက အုတ်မြစ်တစ်ခုပါပဲ။ တစ်ယောက်နဲ့တစ်ယောက်
+                        အပြန်အလှန်လေးစားပြီး အားပေးကူညီတတ်တဲ့ ချစ်စရာကောင်းတဲ့ မိသားစုလေးလို ပတ်ဝန်းကျင်မျိုးကို
+                        ဖန်တီးပေးထားပါတယ်။ ကျောင်းသားတိုင်းက ဒီမိသားစုရဲ့ အဖိုးတန်တဲ့ အစိတ်အပိုင်းလေးတွေဆိုတာ
+                        ခံစားရပါစေချင်ပါတယ်။
+                    </p>
+                </div>
+
+                <!-- Growth -->
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100 card-hover">
+                    <div
+                        class="w-12 h-12 bg-green-50 text-green-600 rounded-lg flex items-center justify-center text-xl mb-6">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4">Growth</h3>
+                    <p class="text-slate-600 text-sm leading-7">
+                        ကလေးတိုင်းမှာ ကြီးထွားပြောင်းလဲလိုစိတ် ရှိနေဖို့ အရမ်းအရေးကြီးပါတယ်။ စိန်ခေါ်မှုတွေကြုံလာတဲ့အခါ
+                        ရင်ဆိုင်ကျော်လွှားတတ်ဖို့ ကူညီပေးပြီး ကလေးတွေရဲ့ ခြေလှမ်းတိုင်း၊ တိုးတက်မှုတိုင်းကို အတူတူ
+                        ဝမ်းသာဂုဏ်ယူပေးပါတယ်။ ဒါမှသာ သူတို့ရဲ့ အနာဂတ်အတွက် ခိုင်မာတဲ့ လမ်းကြောင်းတစ်ခုကို
+                        ဖောက်လုပ်ပေးနိုင်မှာပါ။
                     </p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Events Section -->
-        <section id="events" class="py-16 bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h3 class="text-3xl font-bold section-title text-center mb-12">Upcoming Events & Activities</h3>
-                <div id="events-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="col-span-full py-12 text-center text-gray-400">Loading events...</div>
+    <!-- Events & Announcements Feed -->
+    <section id="announcements" class="py-20 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl font-serif font-bold text-white">Campus Life</h2>
+                    <p class="text-slate-400 mt-2">Updates, events, and activities.</p>
                 </div>
             </div>
-        </section>
 
-        <!-- Teachers Section -->
-        <section id="teachers" class="py-16 bg-gray-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h3 class="text-3xl font-bold section-title text-center mb-12">Meet Our Teachers</h3>
-                <div id="teachers-container" class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                    <div class="col-span-full py-12 text-center text-gray-400">Loading teachers...</div>
-                </div>
+            <div class="grid md:grid-cols-3 gap-8" id="events-grid">
+                <!-- Injected JS -->
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- About Us Section -->
-        <section id="about" class="py-16 bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8">
-                <div class="md:w-1/2">
-                    <h3 class="text-3xl font-bold section-title">About Us ကျောင်းအကြောင်း</h3>
-                    <p class="mt-4 text-lg text-gray-500">
-                        We are proud to serve students from **Pre-school to Grade 6** on our single, beautiful campus.
-                        Our commitment is to provide a high-quality education in a safe and supportive community.
-                    </p>
-                    <ul class="mt-6 space-y-2 text-gray-600">
-                        <li class="flex items-center">
-                            <span class="text-xl mr-2">📍</span>
-                            <strong>Location:</strong> 57 14*13
-                        </li>
-                        <li class="flex items-center">
-                            <span class="text-xl mr-2">📞</span>
-                            <strong>Phone:</strong> 0943046690
-                        </li>
-                    </ul>
-                </div>
-                <!-- Image placeholder for the school with specific dimensions -->
-                <div class="md:w-1/2 mt-8 md:mt-0">
-                    <img src="https://placehold.co/800x600/6C63FF/FFFFFF?text=School+Photo"
-                        alt="A placeholder for a school photo" class="w-full h-auto rounded-lg shadow-lg">
-                </div>
+    <!-- Tuition Table -->
+    <section id="tuition" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-serif font-bold text-school-navy">Tuition & Fees</h2>
+                <p class="text-slate-500 font-sans mt-2">ကျောင်းစရိတ်</p>
             </div>
-        </section>
+            <div class="bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 border-b border-slate-200">
+                        <tr>
+                            <th class="py-4 px-6 font-bold text-slate-700">Grade Level</th>
+                            <th class="py-4 px-6 font-bold text-slate-700 text-right">Annual Tuition</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr>
+                            <td class="py-4 px-6 text-slate-600">Pre-school</td>
+                            <td class="py-4 px-6 text-right font-semibold">TBD</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 text-slate-600">Grade 1</td>
+                            <td class="py-4 px-6 text-right font-semibold">TBD</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 text-slate-600">Grade 2</td>
+                            <td class="py-4 px-6 text-right font-semibold">TBD</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 text-slate-600">Grade 3</td>
+                            <td class="py-4 px-6 text-right font-semibold">TBD</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 text-slate-600">Grade 4</td>
+                            <td class="py-4 px-6 text-right font-semibold">TBD</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 text-slate-600">Grade 5</td>
+                            <td class="py-4 px-6 text-right font-semibold">TBD</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 text-slate-600">Grade 6</td>
+                            <td class="py-4 px-6 text-right font-semibold">TBD</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
 
-        <!-- Campus Section with photo slider -->
-        <section id="campus" class="py-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h3 class="text-3xl font-bold section-title">Campus Tour</h3>
-                <p class="mt-4 text-lg text-gray-500">
-                    Explore our beautiful and modern campus through these photos.
+    <!-- Campus Gallery (Carousel) -->
+    <section id="campus" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-serif font-bold text-school-navy mb-10">Campus Tour</h2>
+            <div class="max-w-5xl mx-auto aspect-video rounded-xl overflow-hidden shadow-2xl relative group bg-black">
+                <div id="carousel-inner" class="w-full h-full relative">
+                    <img src="https://placehold.co/1000x600/1e293b/FFF?text=Campus+Exterior"
+                        class="carousel-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100">
+                    <img src="https://placehold.co/1000x600/334155/FFF?text=Modern+Classrooms"
+                        class="carousel-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-0">
+                    <img src="https://placehold.co/1000x600/475569/FFF?text=Library+&+Lab"
+                        class="carousel-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-0">
+                </div>
+                <!-- Controls -->
+                <button onclick="changeSlide(-1)"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/60 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition"><i
+                        class="fas fa-chevron-left"></i></button>
+                <button onclick="changeSlide(1)"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/60 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition"><i
+                        class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-school-navy text-white pt-16 pb-8" id="contact">
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-12 mb-12">
+            <div>
+                <h3 class="text-xl font-serif font-bold mb-4">School</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Commited to excellence. Inspiring the next generation of leaders through holistic education.
                 </p>
-                <div class="mt-12 w-full max-w-xl mx-auto relative overflow-hidden rounded-xl shadow-lg aspect-square">
-                    <div id="carousel-container" class="w-full h-full">
-                        <!-- Placeholder images for the slider -->
-                        <img src="https://placehold.co/600x600/6C63FF/FFFFFF?text=Campus+Photo+1"
-                            class="carousel-item absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500 active"
-                            alt="Campus Photo 1">
-                        <img src="https://placehold.co/600x600/7671F1/FFFFFF?text=Campus+Photo+2"
-                            class="carousel-item absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500"
-                            alt="Campus Photo 2">
-                        <img src="https://placehold.co/600x600/625BD7/FFFFFF?text=Campus+Photo+3"
-                            class="carousel-item absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500"
-                            alt="Campus Photo 3">
-                    </div>
-                    <!-- Navigation buttons -->
-                    <button id="prevBtn"
-                        class="absolute top-1/2 left-4 -translate-y-1/2 bg-white/50 p-2 rounded-full text-gray-800 hover:bg-white transition-colors duration-200 focus:outline-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-                    <button id="nextBtn"
-                        class="absolute top-1/2 right-4 -translate-y-1/2 bg-white/50 p-2 rounded-full text-gray-800 hover:bg-white transition-colors duration-200 focus:outline-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 text-school-gold">Contact</h4>
+                <ul class="space-y-2 text-slate-300 text-sm">
+                    <li><i class="fas fa-phone w-6"></i> 0943046690</li>
+                    <li><i class="fas fa-map-marker-alt w-6"></i> 57 14*13, Mandalay</li>
+                    <li><i class="fas fa-envelope w-6"></i> info@sanschool.com</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 text-school-gold">Quick Links</h4>
+                <div class="flex flex-col space-y-2 text-sm text-slate-300">
+                    <a href="#about" class="hover:text-white">About Us</a>
+                    <a href="#tuition" class="hover:text-white">Admissions</a>
+                    <a href="admin/index.html" class="hover:text-white">Admin Portal</a>
                 </div>
             </div>
-        </section>
-
-        <!-- Tuition Section with grade breakdown -->
-        <section id="tuition" class="py-16 bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h3 class="text-3xl font-bold section-title">Tuition & Fees ကျောင်းစရိတ်</h3>
-                <p class="mt-4 text-lg text-gray-500">
-                    Our tuition is designed to be accessible, offering a great value for the quality of education we
-                    provide. Please see the breakdown by grade level below.
-                </p>
-                <div class="mt-12 overflow-x-auto">
-                    <table class="min-w-full bg-white rounded-lg shadow-lg">
-                        <thead>
-                            <tr class="bg-indigo-100 text-indigo-600">
-                                <th class="py-4 px-6 text-left font-semibold rounded-tl-lg">Grade Level</th>
-                                <th class="py-4 px-6 text-left font-semibold">Tuition</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-t border-gray-200">
-                                <td class="py-4 px-6">Pre-school</td>
-                                <td class="py-4 px-6 font-semibold">XXXX</td>
-                            </tr>
-                            <tr class="bg-gray-50 border-t border-gray-200">
-                                <td class="py-4 px-6">Grade 1</td>
-                                <td class="py-4 px-6 font-semibold">XXXX</td>
-                            </tr>
-                            <tr class="border-t border-gray-200">
-                                <td class="py-4 px-6">Grade 2</td>
-                                <td class="py-4 px-6 font-semibold">XXXX</td>
-                            </tr>
-                            <tr class="bg-gray-50 border-t border-gray-200">
-                                <td class="py-4 px-6">Grade 3</td>
-                                <td class="py-4 px-6 font-semibold">XXXX</td>
-                            </tr>
-                            <tr class="border-t border-gray-200">
-                                <td class="py-4 px-6">Grade 4</td>
-                                <td class="py-4 px-6 font-semibold">XXXX</td>
-                            </tr>
-                            <tr class="bg-gray-50 border-t border-gray-200">
-                                <td class="py-4 px-6">Grade 5</td>
-                                <td class="py-4 px-6 font-semibold">XXXX</td>
-                            </tr>
-                            <tr class="border-t border-gray-200">
-                                <td class="py-4 px-6">Grade 6</td>
-                                <td class="py-4 px-6 font-semibold">XXXX</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- Our Values Section -->
-        <section id="values" class="py-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center">
-                    <h3 class="text-3xl font-bold section-title">Our Core Values</h3>
-                    <p class="mt-4 text-lg text-gray-500">
-                        Our school is built on a foundation of values that guide our community and inspire our students
-                        every day.
-                    </p>
-                </div>
-                <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                    <div class="card text-center">
-                        <div
-                            class="flex items-center justify-center h-16 w-16 mx-auto rounded-full bg-indigo-100 text-indigo-600">
-                            <span class="text-2xl">💡</span>
-                        </div>
-                        <h4 class="mt-6 text-xl font-semibold">Curiosity</h4>
-                        <p class="mt-4 text-gray-500">ကျွန်မတို့ကျောင်းမှာတော့ သမီးတို့၊ သားတို့ရဲ့ စူးစမ်းလိုစိတ်ကို
-                            အမြဲတမ်း အားပေးမြှင့်တင်ပေးပါတယ်။ ကလေးတွေ မေးခွန်းတွေ မေးတာ၊ အသစ်အဆန်းတွေကို ရှာဖွေတာနဲ့
-                            သင်ယူတာတွေကနေ တစ်သက်တာလုံးအတွက် အဖိုးတန်တဲ့ အသိပညာတွေနဲ့ အရည်အချင်းတွေကို
-                            ပိုင်ဆိုင်နိုင်ဖို့ ကူညီပေးနေတာပါ။</p>
-                    </div>
-                    <div class="card text-center">
-                        <div
-                            class="flex items-center justify-center h-16 w-16 mx-auto rounded-full bg-indigo-100 text-indigo-600">
-                            <span class="text-2xl">🤝</span>
-                        </div>
-                        <h4 class="mt-6 text-xl font-semibold">Community</h4>
-                        <p class="mt-4 text-gray-500">ပူးပေါင်းဆောင်ရွက်မှုဆိုတာ ကျွန်မတို့ကျောင်းရဲ့ အဓိက
-                            အုတ်မြစ်တစ်ခုပါပဲ။ တစ်ယောက်နဲ့တစ်ယောက် အပြန်အလှန်လေးစားပြီး အားပေးကူညီတတ်တဲ့
-                            ချစ်စရာကောင်းတဲ့ မိသားစုလေးလို ပတ်ဝန်းကျင်မျိုးကို ဖန်တီးပေးထားပါတယ်။ ကျောင်းသားတိုင်းက
-                            ဒီမိသားစုရဲ့ အဖိုးတန်တဲ့ အစိတ်အပိုင်းလေးတွေဆိုတာ ခံစားရပါစေချင်ပါတယ်။</p>
-                    </div>
-                    <div class="card text-center">
-                        <div
-                            class="flex items-center justify-center h-16 w-16 mx-auto rounded-full bg-indigo-100 text-indigo-600">
-                            <span class="text-2xl">🌱</span>
-                        </div>
-                        <h4 class="mt-6 text-xl font-semibold">Growth</h4>
-                        <p class="mt-4 text-gray-500">ကလေးတိုင်းမှာ ကြီးထွားပြောင်းလဲလိုစိတ် ရှိနေဖို့
-                            အရမ်းအရေးကြီးပါတယ်။ စိန်ခေါ်မှုတွေကြုံလာတဲ့အခါ ရင်ဆိုင်ကျော်လွှားတတ်ဖို့ ကူညီပေးပြီး
-                            ကလေးတွေရဲ့ ခြေလှမ်းတိုင်း၊ တိုးတက်မှုတိုင်းကို အတူတူ ဝမ်းသာဂုဏ်ယူပေးပါတယ်။ ဒါမှသာ သူတို့ရဲ့
-                            အနာဂတ်အတွက် ခိုင်မာတဲ့ လမ်းကြောင်းတစ်ခုကို ဖောက်လုပ်ပေးနိုင်မှာပါ။</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="py-16 bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h3 class="text-3xl font-bold section-title">Contact Us ဆက်သွယ်ရန်</h3>
-                <p class="mt-4 text-lg text-gray-500">
-                    Have questions? We're here to help. Get in touch with us to learn more about our school.
-                </p>
-                <div class="mt-8">
-                    <p class="text-xl font-semibold text-gray-700">Phone: 0943046690</p>
-                    <p class="text-xl font-semibold text-gray-700">Location: 57 14*13</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="bg-gray-800">
-        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center text-gray-400 text-sm">
-            <p>&copy; 2025 San School. All rights reserved.</p>
-            <a href="admin.html"
-                class="text-xs text-gray-500 hover:text-indigo-400 transition-colors duration-200 block mt-2">(Admin
-                Portal)</a>
+        </div>
+        <div class="border-t border-slate-700 pt-8 text-center text-xs text-slate-500">
+            &copy; 2026 School. All Rights Reserved.
         </div>
     </footer>
 
-    <!-- Firebase SDK Imports for Dynamic Content -->
+
+
+    <!-- Logic -->
     <script type="module">
         import { supabase } from './assets/js/supabase-client.js';
 
-        // Utility for formatting timestamps
-        const formatTimestamp = (timestamp) => {
-            if (!timestamp) return 'Just Now';
-            const date = new Date(timestamp);
-            return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
+        // --- Mobile Menu ---
+        document.getElementById('mobile-btn').onclick = () => {
+            const m = document.getElementById('mobile-menu');
+            m.classList.toggle('hidden');
         };
 
-        // Function to render the latest announcement post
-        const renderLatestPost = (post) => {
+        // --- Data Fetching ---
+
+        // 1. ANNOUNCEMENTS & EVENTS
+        async function fetchContent() {
+            // Announcement Tablet
+            const { data: ann } = await supabase.from('announcements').select('*').order('created_at', { ascending: false }).limit(1);
             const container = document.getElementById('latest-announcement-container');
-            if (!container) return;
 
-            if (!post) {
+            if (ann && ann.length > 0) {
+                const item = ann[0];
                 container.innerHTML = `
-                    <p class="card p-8 text-gray-500">No announcements have been posted yet. Check back soon!</p>
+                    <div class="flex flex-col md:flex-row">
+                        ${item.image_url ? `<div class="md:w-1/3 h-64 md:h-auto"><img src="${item.image_url}" class="w-full h-full object-cover"></div>` : ''}
+                        <div class="${item.image_url ? 'md:w-2/3' : 'w-full'} p-8 flex flex-col justify-center text-left">
+                            <span class="text-school-blue font-bold text-xs uppercase tracking-widest mb-2">Notice Board</span>
+                            <h4 class="text-2xl font-bold text-school-navy mb-4 font-serif">${item.title}</h4>
+                            <p class="text-slate-600 mb-6 leading-relaxed line-clamp-3">${item.content}</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="text-xs text-slate-400 font-mono">${new Date(item.created_at).toLocaleDateString()}</span>
+                                <a href="announcements.html" class="text-school-gold font-bold text-sm hover:underline">Read More &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
                 `;
-                return;
+            } else {
+                container.innerHTML = `<div class="p-12 text-center text-slate-500">No active announcements at this time.</div>`;
             }
 
-            const contentSnippet = post.content.substring(0, 150) + (post.content.length > 150 ? '...' : '');
-            const formattedDate = formatTimestamp(post.created_at);
+            // Events Feed
+            const { data: evts } = await supabase.from('events').select('*').order('event_date', { ascending: true }).limit(3);
+            const evtGrid = document.getElementById('events-grid');
+            if (evts && evts.length) {
+                evtGrid.innerHTML = evts.map(e => `
+                    <div class="bg-slate-800 rounded-lg overflow-hidden border border-slate-700 hover:border-slate-600 transition group cursor-pointer" onclick="window.location.href='events.html'">
+                        <div class="h-48 overflow-hidden relative">
+                             ${e.image_url?.match(/\.(mp4|webm)$/i)
+                        ? `<video src="${e.image_url}" class="w-full h-full object-cover" controls></video>`
+                        : `<img src="${e.image_url || 'https://placehold.co/600x400/222/FFF'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">`
+                    }
+                             <div class="absolute top-2 right-2 bg-school-gold text-school-navy text-xs font-bold px-2 py-1 rounded">
+                                ${new Date(e.event_date).toLocaleDateString()}
+                             </div>
+                        </div>
+                        <div class="p-5">
+                            <h4 class="font-bold text-lg mb-2 text-white line-clamp-1">${e.title}</h4>
+                            <p class="text-slate-400 text-sm line-clamp-2">${e.description || ''}</p>
+                            <div class="mt-4 text-xs text-school-gold font-semibold uppercase"><i class="fas fa-map-pin mr-1"></i> ${e.location || 'Campus'}</div>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                evtGrid.innerHTML = `<p class="col-span-3 text-center text-slate-500 py-10">No upcoming events.</p>`;
+            }
+        }
 
-            container.innerHTML = `
-                <a href="announcements.html" class="card block text-left hover:scale-[1.01] transition-transform duration-300 cursor-pointer">
-                    ${post.image_url ?
-                    `<img src="${post.image_url}" alt="${post.title}" class="w-full h-48 object-cover rounded-t-lg mb-4" 
-                              onerror="this.onerror=null;this.src='https://placehold.co/600x200/F1F1F1/3F3D56?text=Image+Not+Available';"
-                        >` : ''}
-                    <h4 class="text-2xl font-bold text-gray-900 mb-2">${post.title}</h4>
-                    <p class="text-sm text-indigo-600 mb-4 font-medium">Posted: ${formattedDate}</p>
-                    <p class="text-gray-600">${contentSnippet}</p>
-                    <span class="mt-4 block text-indigo-600 font-semibold hover:text-indigo-800">Read All Announcements →</span>
-                </a>
+        // 2. FACULTY (Org Style)
+        async function fetchFaculty() {
+            document.getElementById('teacher-loading').style.display = 'none';
+            const { data } = await supabase.from('teachers').select('*').order('created_at');
+            if (!data) return;
+
+            const heads = data.filter(t => t.grade.toLowerCase().includes('principal') || t.grade.toLowerCase().includes('head'));
+            const staff = data.filter(t => !heads.includes(t));
+
+            // Render Heads
+            const headContainer = document.getElementById('leadership-container');
+            if (heads.length > 0) {
+                headContainer.innerHTML = heads.map(t => createCard(t, true)).join('');
+            }
+
+            // Render Staff
+            const staffContainer = document.getElementById('staff-container');
+            staffContainer.innerHTML = staff.map(t => createCard(t, false)).join('');
+        }
+
+        function createCard(t, isHead) {
+            const safe = (str) => (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            return `
+                <div class="text-center group relative cursor-pointer ${isHead ? 'w-full max-w-xs' : ''}" 
+                     onclick="openModal('${safe(t.name)}', '${safe(t.grade)}', '${safe(t.photo_url)}', '${safe(t.bio)}')">
+                    ${!isHead ? '<div class="org-connector"></div>' : ''}
+                    <div class="relative inline-block">
+                        <img src="${t.photo_url || 'https://placehold.co/150'}" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md group-hover:border-school-gold transition duration-300 bg-white">
+                        <div class="absolute bottom-0 right-0 bg-school-navy text-white text-xs w-8 h-8 flex items-center justify-center rounded-full border-2 border-white shadow-sm">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                    </div>
+                    <h4 class="mt-4 font-bold text-school-navy text-lg">${t.name}</h4>
+                    <p class="text-xs font-bold text-school-blue uppercase tracking-wide">${t.grade}</p>
+                </div>
             `;
-        };
-
-        // Fetch latest announcement from Supabase
-        const fetchLatestAnnouncement = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from('announcements')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-                    .limit(1)
-                    .single();
-
-                if (error && error.code !== 'PGRST116') { // PGRST116 is "No rows found"
-                    console.error('Error fetching announcement:', error);
-                    document.getElementById('latest-announcement-container').innerHTML = `
-                        <p class="card p-8 text-red-600">Failed to load announcements.</p>
-                    `;
-                    return;
-                }
-
-                renderLatestPost(data);
-
-                // Optional: Subscribe to realtime updates
-                supabase
-                    .channel('public:announcements')
-                    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'announcements' }, payload => {
-                        renderLatestPost(payload.new);
-                    })
-                    .subscribe();
-
-            } catch (err) {
-                console.error('Unexpected error:', err);
-            }
-        };
-
-        // Fetch and Render Events
-        async function fetchEvents() {
-            const { data } = await supabase.from('events').select('*').order('event_date', { ascending: true }).limit(3);
-            const container = document.getElementById('events-container');
-            if (data && data.length > 0) {
-                container.innerHTML = data.map(evt => `
-                    <div class="bg-white border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
-                        ${evt.image_url ? `<img src="${evt.image_url}" class="w-full h-48 object-cover">` : ''}
-                        <div class="p-6">
-                            <h4 class="text-xl font-bold mb-1">${evt.title}</h4>
-                            <p class="text-sm text-indigo-600 mb-3 font-medium">
-                                ${new Date(evt.event_date).toLocaleDateString()} @ ${evt.location || 'Campus'}
-                            </p>
-                            <p class="text-gray-600 text-sm line-clamp-3">${evt.description || ''}</p>
-                        </div>
-                    </div>
-                `).join('');
-            } else {
-                container.innerHTML = '<p class="text-center text-gray-500 col-span-full py-8">No upcoming events scheduled.</p>';
-            }
         }
 
-        // Fetch and Render Teachers
-        async function fetchTeachers() {
-            const { data } = await supabase.from('teachers').select('*');
-            const container = document.getElementById('teachers-container');
-            if (data && data.length > 0) {
-                container.innerHTML = data.map(t => `
-                    <div class="text-center group">
-                        <div class="relative w-32 h-32 mx-auto mb-4">
-                            <img src="${t.photo_url || 'https://placehold.co/150'}" class="w-full h-full rounded-full object-cover shadow-lg border-4 border-white group-hover:border-indigo-100 transition">
-                        </div>
-                        <h4 class="text-lg font-bold text-gray-900">${t.name}</h4>
-                        <p class="text-indigo-600 text-sm font-semibold uppercase tracking-wide">${t.grade}</p>
-                        <p class="text-gray-500 text-xs mt-2 italic px-4 line-clamp-2">${t.bio || ''}</p>
-                    </div>
-                `).join('');
-            } else {
-                container.innerHTML = '<p class="text-center text-gray-500 col-span-full">Faculty list updating...</p>';
-            }
-        }
+        // --- Modals & Carousel ---
+        window.openModal = (n, r, i, b) => {
+            document.getElementById('m-name').textContent = n;
+            document.getElementById('m-role').textContent = r;
+            document.getElementById('m-photo').src = i;
+            document.getElementById('m-bio').textContent = b || "Valued faculty member of School.";
+            const m = document.getElementById('profile-modal');
+            const bX = document.getElementById('modal-box');
+            m.classList.remove('hidden');
+            setTimeout(() => { bX.classList.remove('scale-95', 'opacity-0'); bX.classList.add('scale-100', 'opacity-100'); }, 10);
+        };
+        window.closeModal = () => {
+            const m = document.getElementById('profile-modal');
+            const bX = document.getElementById('modal-box');
+            bX.classList.add('scale-95', 'opacity-0'); bX.classList.remove('scale-100', 'opacity-100');
+            setTimeout(() => m.classList.add('hidden'), 200);
+        };
+
+        // Carousel
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        window.changeSlide = (n) => {
+            slides[slideIndex].classList.remove('opacity-100');
+            slides[slideIndex].classList.add('opacity-0');
+            slideIndex = (slideIndex + n + slides.length) % slides.length;
+            slides[slideIndex].classList.remove('opacity-0');
+            slides[slideIndex].classList.add('opacity-100');
+        };
+        setInterval(() => changeSlide(1), 5000);
 
         // Init
-        document.addEventListener('DOMContentLoaded', function () {
-            fetchEvents();
-            fetchTeachers();
-            // Main site JavaScript (mobile menu, carousel, intersection observer)
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-link');
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            if (mobileMenuButton) {
-                mobileMenuButton.addEventListener('click', () => {
-                    const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
-                    mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
-                    mobileMenu.classList.toggle('hidden');
-                    mobileMenuButton.querySelector('svg:first-child').classList.toggle('hidden');
-                    // Toggle the second svg (close icon) if it exists, roughly checking logic
-                    const closeIcon = mobileMenuButton.querySelector('svg:last-child');
-                    if (closeIcon) closeIcon.classList.toggle('hidden');
-                });
-            }
-
-            document.querySelectorAll('#mobile-menu a').forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                    mobileMenuButton.setAttribute('aria-expanded', 'false');
-                    mobileMenuButton.querySelector('svg:first-child').classList.remove('hidden');
-                    const closeIcon = mobileMenuButton.querySelector('svg:last-child');
-                    if (closeIcon) closeIcon.classList.add('hidden');
-                });
-            });
-
-            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.4 };
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        navLinks.forEach(link => {
-                            if (!link.href.includes('announcements.html')) {
-                                link.classList.remove('active');
-                                if (link.getAttribute('href')?.substring(1) === entry.target.id) {
-                                    link.classList.add('active');
-                                }
-                            }
-                        });
-                    }
-                });
-            }, observerOptions);
-
-            sections.forEach(section => { observer.observe(section); });
-
-            // Campus Carousel Logic 
-            const slides = document.querySelectorAll('.carousel-item');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            let currentSlide = 0;
-
-            function showSlide(index) {
-                slides.forEach((slide, i) => {
-                    slide.classList.remove('active');
-                    if (i === index) {
-                        slide.classList.add('active');
-                    }
-                });
-            }
-
-            if (slides.length > 0) {
-                if (nextBtn) nextBtn.addEventListener('click', () => {
-                    currentSlide = (currentSlide + 1) % slides.length;
-                    showSlide(currentSlide);
-                });
-
-                if (prevBtn) prevBtn.addEventListener('click', () => {
-                    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                    showSlide(currentSlide);
-                });
-            }
-
-            fetchLatestAnnouncement();
-        });
+        fetchContent();
+        fetchFaculty();
     </script>
 </body>
 

@@ -4,203 +4,403 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - San School</title>
+    <title>Admin Portal - School</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #F8FAFC;
+        }
+
         .tab-content {
             display: none;
+            animation: fadeIn 0.3s ease;
         }
 
         .tab-content.active {
             display: block;
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sidebar Transition */
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .sidebar-open #sidebar {
+            transform: translateX(0);
+        }
+
+        .sidebar-closed #sidebar {
+            transform: translateX(-100%);
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar-closed #sidebar {
+                transform: translateX(0);
+            }
+
+            /* Always visible on desktop */
+        }
+
+        /* Glass Effect for Cards */
+        .glass-card {
+            background: white;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
 
-<body class="bg-gray-100 font-sans">
-    <div class="min-h-screen flex">
+<body class="text-slate-800 sidebar-closed"> <!-- Default closed on mobile -->
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden flex items-center justify-between bg-white p-4 shadow-sm z-20 relative">
+        <h1 class="text-xl font-bold text-indigo-600">School Admin</h1>
+        <button id="menu-btn" class="text-slate-600 focus:outline-none">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                </path>
+            </svg>
+        </button>
+    </div>
+
+    <div class="flex h-screen overflow-hidden relative">
         <!-- Sidebar -->
-        <aside class="w-64 bg-gray-800 text-white flex flex-col">
-            <div class="p-6 text-xl font-bold border-b border-gray-700">Admin Portal</div>
-            <nav class="flex-1 p-4 space-y-2">
+        <aside id="sidebar"
+            class="absolute lg:relative w-64 bg-slate-900 text-white h-full flex flex-col z-30 transform -translate-x-full lg:translate-x-0 shadow-2xl lg:shadow-none">
+            <div class="p-8 text-2xl font-bold text-indigo-400 border-b border-slate-800 hidden lg:block">Admin Portal
+            </div>
+
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
                 <button onclick="switchTab('dashboard')"
-                    class="w-full text-left px-4 py-2 rounded hover:bg-gray-700 tab-btn active bg-gray-700 text-white"
-                    id="btn-dashboard">Dashboard</button>
+                    class="w-full flex items-center px-4 py-3 rounded-xl hover:bg-slate-800 transition tab-btn active bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
+                    id="btn-dashboard">
+                    <span class="mr-3">📊</span> Dashboard
+                </button>
                 <button onclick="switchTab('announcements')"
-                    class="w-full text-left px-4 py-2 rounded hover:bg-gray-700 tab-btn text-gray-300"
-                    id="btn-announcements">Announcements</button>
+                    class="w-full flex items-center px-4 py-3 rounded-xl hover:bg-slate-800 transition tab-btn text-slate-400"
+                    id="btn-announcements">
+                    <span class="mr-3">📢</span> Announcements
+                </button>
                 <button onclick="switchTab('events')"
-                    class="w-full text-left px-4 py-2 rounded hover:bg-gray-700 tab-btn text-gray-300"
-                    id="btn-events">Events</button>
+                    class="w-full flex items-center px-4 py-3 rounded-xl hover:bg-slate-800 transition tab-btn text-slate-400"
+                    id="btn-events">
+                    <span class="mr-3">📅</span> Events
+                </button>
                 <button onclick="switchTab('teachers')"
-                    class="w-full text-left px-4 py-2 rounded hover:bg-gray-700 tab-btn text-gray-300"
-                    id="btn-teachers">Teachers</button>
+                    class="w-full flex items-center px-4 py-3 rounded-xl hover:bg-slate-800 transition tab-btn text-slate-400"
+                    id="btn-teachers">
+                    <span class="mr-3">👨‍🏫</span> Teachers
+                </button>
                 <button onclick="switchTab('students')"
-                    class="w-full text-left px-4 py-2 rounded hover:bg-gray-700 tab-btn text-gray-300"
-                    id="btn-students">Students & Performance</button>
+                    class="w-full flex items-center px-4 py-3 rounded-xl hover:bg-slate-800 transition tab-btn text-slate-400"
+                    id="btn-students">
+                    <span class="mr-3">🎓</span> Students
+                </button>
                 <button onclick="switchTab('parents')"
-                    class="w-full text-left px-4 py-2 rounded hover:bg-gray-700 tab-btn text-gray-300"
-                    id="btn-parents">Parent Requests</button>
+                    class="w-full flex items-center px-4 py-3 rounded-xl hover:bg-slate-800 transition tab-btn text-slate-400"
+                    id="btn-parents">
+                    <span class="mr-3">👨‍👩‍👧</span> Parent Requests
+                </button>
             </nav>
-            <div class="p-4 border-t border-gray-700">
+
+            <div class="p-4 border-t border-slate-800">
                 <button id="logout-btn"
-                    class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-sm">Logout</button>
+                    class="w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition shadow-md">Logout</button>
             </div>
         </aside>
 
+        <!-- Overlay for mobile sidebar -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-20 hidden lg:hidden glass-blur"></div>
+
         <!-- Main Content -->
-        <main class="flex-1 p-8 overflow-y-auto">
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 w-full">
+
             <!-- Dashboard Info -->
-            <div id="dashboard" class="tab-content active transition-all">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Overview</h2>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <p class="text-gray-500 text-sm">Total Students</p>
-                        <p class="text-3xl font-bold text-indigo-600" id="stat-students">-</p>
+            <div id="dashboard" class="tab-content active">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800">Overview</h2>
+                    <p class="text-slate-500">Welcome back, Admin.</p>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-indigo-500">
+                        <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Total Students</p>
+                        <p class="text-4xl font-bold text-slate-800 mt-2" id="stat-students">-</p>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <p class="text-gray-500 text-sm">Pending Parents</p>
-                        <p class="text-3xl font-bold text-orange-500" id="stat-pending">-</p>
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-orange-500">
+                        <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Pending Requests</p>
+                        <p class="text-4xl font-bold text-slate-800 mt-2" id="stat-pending">-</p>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <p class="text-gray-500 text-sm">Teachers</p>
-                        <p class="text-3xl font-bold text-green-600" id="stat-teachers">-</p>
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-emerald-500">
+                        <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Teachers</p>
+                        <p class="text-4xl font-bold text-slate-800 mt-2" id="stat-teachers">-</p>
                     </div>
                 </div>
             </div>
 
             <!-- Announcements -->
-            <div id="announcements" class="tab-content space-y-6">
-                <h2 class="text-2xl font-bold text-gray-800">Announcements</h2>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-lg font-semibold mb-4">Post Announcement</h3>
-                    <form id="ann-form" class="space-y-4">
-                        <input type="text" id="ann-title" placeholder="Title" required
-                            class="w-full p-2 border rounded">
-                        <textarea id="ann-content" placeholder="Content" rows="3" required
-                            class="w-full p-2 border rounded"></textarea>
-                        <label class="block text-sm text-gray-600">Image (optional)</label>
-                        <input type="file" id="ann-file" class="w-full p-2 border rounded">
-                        <button type="submit"
-                            class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Post</button>
+            <div id="announcements" class="tab-content space-y-8">
+                <h2 class="text-3xl font-bold text-slate-800">Manage Announcements</h2>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold mb-6 text-slate-700">Create / Edit Announcement</h3>
+                    <form id="ann-form" class="space-y-4 max-w-2xl">
+                        <input type="hidden" id="ann-id">
+                        <input type="text" id="ann-title" placeholder="Posting Title" required
+                            class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                        <textarea id="ann-content" placeholder="Posting Text..." rows="4" required
+                            class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"></textarea>
+
+                        <div class="flex items-center space-x-2">
+                            <label class="block text-sm font-medium text-slate-600">Media (Image/Video)</label>
+                            <span class="text-xs text-slate-400">- Optional</span>
+                        </div>
+                        <input type="file" id="ann-file" accept="image/*,video/*"
+                            class="w-full p-2 border border-slate-200 rounded-lg text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+
+                        <div class="flex space-x-3">
+                            <button type="submit" id="ann-submit-btn"
+                                class="bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 transition font-medium shadow-lg shadow-indigo-500/30">Post
+                                Announcement</button>
+                            <button type="button" id="ann-cancel-btn" onclick="resetAnnForm()"
+                                class="hidden px-6 py-3 text-slate-500 hover:bg-slate-100 rounded-xl transition">Cancel
+                                Edit</button>
+                        </div>
                     </form>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold mb-4 text-slate-700">Recent Announcements</h3>
+                    <div id="ann-list" class="space-y-4"></div>
                 </div>
             </div>
 
             <!-- Events -->
-            <div id="events" class="tab-content space-y-6">
-                <h2 class="text-2xl font-bold text-gray-800">Events</h2>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-lg font-semibold mb-4">Post Event</h3>
-                    <form id="event-form" class="space-y-4">
-                        <input type="text" id="evt-title" placeholder="Event Title" required
-                            class="w-full p-2 border rounded">
-                        <textarea id="evt-desc" placeholder="Description" rows="3"
-                            class="w-full p-2 border rounded"></textarea>
-                        <input type="text" id="evt-loc" placeholder="Location" class="w-full p-2 border rounded">
-                        <input type="date" id="evt-date" required class="w-full p-2 border rounded">
-                        <label class="block text-sm text-gray-600">Event Image</label>
-                        <input type="file" id="evt-file" class="w-full p-2 border rounded">
-                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Add
-                            Event</button>
+            <div id="events" class="tab-content space-y-8">
+                <h2 class="text-3xl font-bold text-slate-800">School Events</h2>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold mb-6 text-slate-700">Create / Edit Event</h3>
+                    <form id="event-form" class="space-y-4 max-w-2xl">
+                        <input type="hidden" id="evt-id">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" id="evt-title" placeholder="Event Posting Title" required
+                                class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 transition">
+                            <input type="date" id="evt-date" required
+                                class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 transition">
+                        </div>
+                        <input type="text" id="evt-loc" placeholder="Location (e.g. Main Hall)"
+                            class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 transition">
+                        <input type="text" id="evt-map" placeholder="Google Map Embed URL or Link (Optional)"
+                            class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 transition">
+                        <textarea id="evt-desc" placeholder="Event Posting Text..." rows="3"
+                            class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 transition"></textarea>
+
+                        <div class="flex items-center space-x-2">
+                            <label class="block text-sm text-slate-600">Event Banner / Video</label>
+                            <span class="text-xs text-slate-400">- Optional</span>
+                        </div>
+                        <input type="file" id="evt-file" accept="image/*,video/*"
+                            class="w-full p-2 border border-slate-200 rounded-lg text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+
+                        <div class="flex space-x-3">
+                            <button type="submit" id="evt-submit-btn"
+                                class="bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 transition font-medium shadow-lg shadow-indigo-500/30">Create
+                                Event</button>
+                            <button type="button" id="evt-cancel-btn" onclick="resetEvtForm()"
+                                class="hidden px-6 py-3 text-slate-500 hover:bg-slate-100 rounded-xl transition">Cancel
+                                Edit</button>
+                        </div>
                     </form>
+                </div>
+
+                <div id="events-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Events List with Delete -->
                 </div>
             </div>
 
             <!-- Teachers -->
-            <div id="teachers" class="tab-content space-y-6">
-                <h2 class="text-2xl font-bold text-gray-800">Teachers</h2>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-lg font-semibold mb-4">Add Teacher</h3>
-                    <form id="teacher-form" class="space-y-4">
-                        <input type="text" id="tea-name" placeholder="Teacher Name" required
-                            class="w-full p-2 border rounded">
-                        <input type="text" id="tea-grade" placeholder="Grade (e.g. Grade 5)" required
-                            class="w-full p-2 border rounded">
-                        <textarea id="tea-bio" placeholder="Bio" rows="2" class="w-full p-2 border rounded"></textarea>
-                        <label class="block text-sm text-gray-600">Photo</label>
-                        <input type="file" id="tea-file" class="w-full p-2 border rounded">
-                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Add
+            <div id="teachers" class="tab-content space-y-8">
+                <h2 class="text-3xl font-bold text-slate-800">Faculty Management</h2>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold mb-6 text-slate-700">Add Teacher</h3>
+                    <form id="teacher-form" class="space-y-4 max-w-2xl">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" id="tea-name" placeholder="Full Name" required
+                                class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 transition">
+                            <input type="text" id="tea-grade" placeholder="Assign Grade (e.g. Grade 5)" required
+                                class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 transition">
+                        </div>
+                        <textarea id="tea-bio" placeholder="Bio (optional)" rows="2"
+                            class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 transition"></textarea>
+
+                        <label class="block text-sm text-slate-600">Photo</label>
+                        <input type="file" id="tea-file" accept="image/*"
+                            class="w-full p-2 border border-slate-200 rounded-lg text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+
+                        <button type="submit"
+                            class="bg-emerald-600 text-white px-6 py-3 rounded-xl hover:bg-emerald-700 transition font-medium shadow-lg shadow-emerald-500/30">Add
                             Teacher</button>
                     </form>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-lg font-semibold mb-4">Staff List</h3>
-                    <div id="teachers-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold mb-4 text-slate-700">Staff List</h3>
+                    <div id="teachers-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
             </div>
 
-            <!-- Students & Performance -->
-            <div id="students" class="tab-content space-y-6">
-                <h2 class="text-2xl font-bold text-gray-800">Students & Performance</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h3 class="text-lg font-semibold mb-4">Register Student</h3>
+            <!-- Students -->
+            <div id="students" class="tab-content space-y-8">
+                <h2 class="text-3xl font-bold text-slate-800">Students & Reports</h2>
+
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    <!-- Register Form -->
+                    <div class="glass-card p-6 rounded-2xl xl:col-span-1 h-fit">
+                        <h3 class="text-xl font-bold mb-6 text-slate-700">Register / Edit Student</h3>
                         <form id="student-form" class="space-y-4">
-                            <input type="text" id="stu-name" placeholder="Full Name" required
-                                class="w-full p-2 border rounded">
+                            <input type="hidden" id="stu-id">
+                            <input type="text" id="stu-name" placeholder="Student Full Name" required
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
                             <input type="text" id="stu-grade" placeholder="Grade (e.g. Grade 5)" required
-                                class="w-full p-2 border rounded">
-                            <input type="text" id="stu-parent-phone" placeholder="Parent Phone" required
-                                class="w-full p-2 border rounded">
-                            <button type="submit"
-                                class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Register</button>
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+
+                            <label class="block text-sm text-slate-600">Student Photo (Optional)</label>
+                            <input type="file" id="stu-file" accept="image/*"
+                                class="w-full p-2 border border-slate-200 rounded-lg text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+
+                            <hr class="border-slate-200 my-4">
+                            <p class="text-sm font-bold text-slate-600">Parent Info</p>
+
+                            <input type="text" id="stu-parent-phone" placeholder="Parent Phone (Login ID)" required
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+
+                            <!-- New Fields for creating parent -->
+                            <div class="bg-indigo-50 p-4 rounded-lg space-y-3">
+                                <p class="text-xs text-indigo-800 font-semibold">New Account Setup (If parent doesn't
+                                    exist)</p>
+                                <input type="text" id="stu-parent-name" placeholder="Parent Name (Optional)"
+                                    class="w-full px-3 py-2 border border-indigo-200 rounded text-sm">
+                                <input type="text" id="stu-parent-pass" placeholder="Set Password (Default: 123456)"
+                                    class="w-full px-3 py-2 border border-indigo-200 rounded text-sm">
+                            </div>
+
+                            <button type="submit" id="stu-submit-btn"
+                                class="w-full bg-indigo-600 text-white px-4 py-3 rounded-xl hover:bg-indigo-700 transition font-medium shadow-lg">Register
+                                Student</button>
+                            <button type="button" id="stu-cancel-btn" onclick="resetStuForm()"
+                                class="hidden w-full bg-slate-100 text-slate-600 px-4 py-3 rounded-xl hover:bg-slate-200 transition font-medium">Cancel
+                                Edit</button>
                         </form>
-                        <div id="student-msg" class="mt-2 text-sm"></div>
+                        <div id="student-msg" class="mt-4 text-sm font-medium"></div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow flex-1 overflow-auto max-h-[600px]">
-                        <h3 class="text-lg font-semibold mb-4">Student List</h3>
-                        <div id="student-list" class="space-y-4"></div>
+
+                    <!-- List -->
+                    <div class="glass-card p-6 rounded-2xl xl:col-span-2">
+                        <h3 class="text-xl font-bold mb-4 text-slate-700 flex justify-between items-center">
+                            <span>Student Database</span>
+                            <span class="text-xs font-normal text-slate-400 bg-slate-100 px-2 py-1 rounded">Latest
+                                50</span>
+                        </h3>
+                        <div id="student-list" class="space-y-3 max-h-[600px] overflow-y-auto pr-2"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Parents -->
-            <div id="parents" class="tab-content space-y-6">
-                <h2 class="text-2xl font-bold text-gray-800">Parent Requests</h2>
-                <div class="bg-white rounded-lg shadow overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="parent-list" class="bg-white divide-y divide-gray-200"></tbody>
-                    </table>
+            <div id="parents" class="tab-content space-y-8">
+                <h2 class="text-3xl font-bold text-slate-800">Parent Requests</h2>
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-slate-200">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase">Name</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase">Phone
+                                    </th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase">Password
+                                    </th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase">Status
+                                    </th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase">Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="parent-list" class="bg-white divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 
     <!-- Modals -->
-    <div id="qr-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white p-8 rounded-lg text-center max-w-sm w-full mx-4">
-            <h3 class="text-xl font-bold mb-4" id="qr-modal-title">Student QR</h3>
-            <div id="qrcode" class="flex justify-center mb-4"></div>
+    <div id="qr-modal" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white p-6 rounded-2xl text-center max-w-sm w-full mx-4 shadow-2xl relative animate-fade-in-up">
             <button onclick="document.getElementById('qr-modal').classList.add('hidden')"
-                class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">Close</button>
+                class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition">✕</button>
+            <h3 class="text-xl font-bold mb-4 text-slate-800" id="qr-modal-title">Student QR</h3>
+            <div class="bg-white p-4 rounded-xl border inline-block mb-4">
+                <div id="qrcode"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="saveQR()"
+                    class="flex items-center justify-center space-x-2 bg-indigo-50 text-indigo-700 px-4 py-3 rounded-xl hover:bg-indigo-100 transition font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    <span>Save QR</span>
+                </button>
+                <button onclick="copyLink()"
+                    class="flex items-center justify-center space-x-2 bg-slate-100 text-slate-700 px-4 py-3 rounded-xl hover:bg-slate-200 transition font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                    <span>Copy Link</span>
+                </button>
+            </div>
         </div>
     </div>
 
-    <div id="perf-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white p-8 rounded-lg max-w-md w-full mx-4">
-            <h3 class="text-xl font-bold mb-4">Add Performance Report</h3>
-            <p class="text-sm text-gray-500 mb-4" id="perf-stu-name">Student</p>
+    <div id="perf-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white p-8 rounded-2xl max-w-md w-full mx-4 shadow-2xl">
+            <h3 class="text-xl font-bold mb-2 text-slate-800">Add Performance Report</h3>
+            <p class="text-sm text-indigo-600 font-medium mb-6" id="perf-stu-name">Student</p>
             <form id="perf-form" class="space-y-4">
                 <input type="hidden" id="perf-stu-id">
-                <input type="text" id="perf-term" placeholder="Term (e.g. Mid-term)" required
-                    class="w-full p-2 border rounded">
-                <input type="text" id="perf-subject" placeholder="Subject" required class="w-full p-2 border rounded">
-                <input type="text" id="perf-score" placeholder="Score/Grade" required class="w-full p-2 border rounded">
-                <textarea id="perf-feedback" placeholder="Feedback/Comments"
-                    class="w-full p-2 border rounded"></textarea>
-                <div class="flex justify-end space-x-2">
+                <input type="text" id="perf-term" placeholder="Term (e.g. Final Term)" required
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                <input type="text" id="perf-subject" placeholder="Subject" required
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                <input type="text" id="perf-score" placeholder="Score/Grade (e.g. 95 or A)" required
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                <textarea id="perf-feedback" placeholder="Teacher Feedback..."
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"></textarea>
+                <div class="flex justify-end space-x-3 pt-4">
                     <button type="button" onclick="document.getElementById('perf-modal').classList.add('hidden')"
-                        class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded">Save</button>
+                        class="px-6 py-2 text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
+                    <button type="submit"
+                        class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 shadow-lg shadow-indigo-500/30">Save
+                        Report</button>
                 </div>
             </form>
         </div>
@@ -209,29 +409,49 @@
     <script type="module">
         import { supabase } from '../assets/js/supabase-client.js';
 
-        // --- UTILS ---
+        // --- MOBILE NAV ---
+        const menuBtn = document.getElementById('menu-btn');
+        const sidebar = document.body;
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function toggleSidebar() {
+            if (sidebar.classList.contains('sidebar-closed')) {
+                sidebar.classList.remove('sidebar-closed');
+                sidebar.classList.add('sidebar-open');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('sidebar-closed');
+                sidebar.classList.remove('sidebar-open');
+                overlay.classList.add('hidden');
+            }
+        }
+        menuBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+
+        // --- TABS ---
         window.switchTab = (tabId) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('bg-gray-700', 'text-white'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg');
+                el.classList.add('text-slate-400');
+            });
             const btn = document.getElementById('btn-' + tabId);
-            if (btn) btn.classList.add('bg-gray-700', 'text-white');
+            if (btn) {
+                btn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
+                btn.classList.remove('text-slate-400');
+            }
+            if (window.innerWidth < 1024) toggleSidebar(); // Close on click (mobile)
 
             if (tabId === 'dashboard') loadStats();
             if (tabId === 'parents') loadParents();
             if (tabId === 'students') loadStudents();
             if (tabId === 'teachers') loadTeachers();
+            if (tabId === 'announcements') loadAnnouncements();
+            if (tabId === 'events') loadEvents();
         };
 
-        async function uploadFile(file, bucket) {
-            if (!file) return null;
-            const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
-            const { data, error } = await supabase.storage.from(bucket).upload(fileName, file);
-            if (error) { alert('Upload failed: ' + error.message); return null; }
-            const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(fileName);
-            return publicUrl;
-        }
-
+        // --- AUTH & UPLOAD ---
         async function checkAdmin() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) window.location.href = 'index.html';
@@ -239,8 +459,36 @@
         checkAdmin();
         document.getElementById('logout-btn').addEventListener('click', async () => { await supabase.auth.signOut(); window.location.href = 'index.html'; });
 
-        // --- DASHBOARD LOADERS ---
-        async function loadStats() {
+        async function uploadFile(file, bucket) {
+            if (!file) return null;
+            const ext = file.name.split('.').pop();
+            const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${ext}`;
+            const { error } = await supabase.storage.from(bucket).upload(fileName, file);
+            if (error) { alert('Upload failed: ' + error.message); return null; }
+            const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(fileName);
+            return publicUrl;
+        }
+
+        // --- DELETE HELPERS ---
+        window.deleteItem = async (table, id, refreshFn) => {
+            if (!confirm('Are you sure you want to delete this?')) return;
+            const { error } = await supabase.from(table).delete().eq('id', id);
+
+            if (error) {
+                console.error(error);
+                if (error.code === '23503') {
+                    alert('Cannot delete this item because it is being used by other records (e.g. Students linked to a Parent). Please delete the linked records first.');
+                } else {
+                    alert('Error: ' + error.message);
+                }
+            } else {
+                if (typeof refreshFn === 'function') refreshFn();
+                else if (typeof window[refreshFn] === 'function') window[refreshFn]();
+            }
+        };
+
+        // --- DASHBOARD ---
+        window.loadStats = async function () {
             const { count: s } = await supabase.from('students').select('*', { count: 'exact' });
             const { count: p } = await supabase.from('parent_requests').select('*', { count: 'exact' }).eq('is_approved', false);
             const { count: t } = await supabase.from('teachers').select('*', { count: 'exact' });
@@ -249,96 +497,401 @@
             document.getElementById('stat-teachers').textContent = t || 0;
         }
 
-        // --- FORMS ---
-        // Announcement
+        // --- ANNOUNCEMENTS ---
+        window.loadAnnouncements = async function () {
+            const { data } = await supabase.from('announcements').select('*').order('created_at', { ascending: false });
+            document.getElementById('ann-list').innerHTML = data.map(i => `
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <div class="flex-1">
+                        <h4 class="font-bold text-slate-800">${i.title}</h4>
+                        <p class="text-xs text-slate-500 truncate max-w-md">${i.content}</p>
+                    </div>
+                    <div class="flex items-center space-x-2 mt-2 md:mt-0">
+                        <button onclick="editAnnouncement('${i.id}')" class="text-indigo-600 text-sm hover:underline font-medium">Edit</button>
+                        <button onclick="deleteItem('announcements', '${i.id}', 'loadAnnouncements')" class="text-red-500 text-sm hover:underline">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.editAnnouncement = async (id) => {
+            const { data } = await supabase.from('announcements').select('*').eq('id', id).single();
+            if (data) {
+                document.getElementById('ann-id').value = data.id;
+                document.getElementById('ann-title').value = data.title;
+                document.getElementById('ann-content').value = data.content;
+                document.getElementById('ann-submit-btn').textContent = 'Update Announcement';
+                document.getElementById('ann-cancel-btn').classList.remove('hidden');
+                document.getElementById('ann-form').scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        window.resetAnnForm = () => {
+            document.getElementById('ann-form').reset();
+            document.getElementById('ann-id').value = '';
+            document.getElementById('ann-submit-btn').textContent = 'Post Announcement';
+            document.getElementById('ann-cancel-btn').classList.add('hidden');
+        };
+
         document.getElementById('ann-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const id = document.getElementById('ann-id').value;
+            const title = document.getElementById('ann-title').value;
+            const content = document.getElementById('ann-content').value;
             const file = document.getElementById('ann-file').files[0];
-            const imageUrl = await uploadFile(file, 'school_assets');
 
-            const { error } = await supabase.from('announcements').insert([{
-                title: document.getElementById('ann-title').value,
-                content: document.getElementById('ann-content').value,
-                image_url: imageUrl
-            }]);
-            if (!error) { alert('Posted!'); e.target.reset(); }
+            let url = null;
+            if (file) {
+                url = await uploadFile(file, 'school_assets');
+            }
+
+            const payload = { title, content };
+            if (url) payload.image_url = url;
+
+            let error;
+            if (id) {
+                // Update
+                const { error: err } = await supabase.from('announcements').update(payload).eq('id', id);
+                error = err;
+            } else {
+                // Insert
+                if (url) payload.image_url = url; // Ensure url is set if new
+                const { error: err } = await supabase.from('announcements').insert([payload]);
+                error = err;
+            }
+
+            if (!error) {
+                alert(id ? 'Updated!' : 'Posted!');
+                resetAnnForm();
+                loadAnnouncements();
+            } else {
+                alert('Error: ' + error.message);
+            }
         });
 
-        // Event
+        // --- EVENTS ---
+        window.loadEvents = async function () {
+            const { data } = await supabase.from('events').select('*').order('event_date', { ascending: true });
+            document.getElementById('events-list').innerHTML = data.map(e => `
+                <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm relative group">
+                    <div class="absolute top-2 right-2 flex space-x-1 transition">
+                        <button onclick="editEvent('${e.id}')" class="bg-white text-indigo-600 p-1 rounded shadow text-xs font-bold">Edit</button>
+                        <button onclick="deleteItem('events', '${e.id}', 'loadEvents')" class="bg-white text-red-500 p-1 rounded shadow text-xs font-bold">✕</button>
+                    </div>
+                    ${e.image_url ?
+                    (e.image_url.match(/\.(mp4|webm|ogg)$/i) ?
+                        `<video src="${e.image_url}" class="w-full h-32 object-cover rounded-lg mb-3 bg-black"></video>` :
+                        `<img src="${e.image_url}" class="w-full h-32 object-cover rounded-lg mb-3">`)
+                    : ''}
+                    <h4 class="font-bold text-slate-800">${e.title}</h4>
+                    <p class="text-sm text-indigo-600 font-medium">${e.event_date} @ ${e.location || 'Campus'}</p>
+                </div>
+            `).join('');
+        }
+
+        window.editEvent = async (id) => {
+            const { data } = await supabase.from('events').select('*').eq('id', id).single();
+            if (data) {
+                document.getElementById('evt-id').value = data.id;
+                document.getElementById('evt-title').value = data.title;
+                document.getElementById('evt-date').value = data.event_date;
+                document.getElementById('evt-loc').value = data.location;
+                document.getElementById('evt-map').value = data.map_url || '';
+                document.getElementById('evt-desc').value = data.description || '';
+
+                document.getElementById('evt-submit-btn').textContent = 'Update Event';
+                document.getElementById('evt-cancel-btn').classList.remove('hidden');
+                document.getElementById('event-form').scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        window.resetEvtForm = () => {
+            document.getElementById('event-form').reset();
+            document.getElementById('evt-id').value = '';
+            document.getElementById('evt-submit-btn').textContent = 'Create Event';
+            document.getElementById('evt-cancel-btn').classList.add('hidden');
+        };
+
         document.getElementById('event-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const file = document.getElementById('evt-file').files[0];
-            const imageUrl = await uploadFile(file, 'school_assets'); // Using same bucket with folder preferably
+            const btn = document.getElementById('evt-submit-btn');
+            const originalText = btn.textContent;
+            btn.textContent = originalText.includes('Update') ? 'Updating...' : 'Posting...';
+            btn.disabled = true;
 
-            // Note: need to ensure database column names match. 
-            // In creation step, I made 'events' table.
-            const { error } = await supabase.from('events').insert([{
-                title: document.getElementById('evt-title').value,
-                description: document.getElementById('evt-desc').value,
-                location: document.getElementById('evt-loc').value,
-                event_date: document.getElementById('evt-date').value,
-                // Assuming I didn't add image_url to events table yet in creation? 
-                // Wait, I checked my migration in ID 282, I did NOT add image_url to events.
-                // I need to add that column first!
-            }]);
+            try {
+                const id = document.getElementById('evt-id').value;
+                const file = document.getElementById('evt-file').files[0];
+                let url = null;
 
-            if (error) alert(error.message);
-            else { alert('Event Added!'); e.target.reset(); }
+                if (file) {
+                    url = await uploadFile(file, 'school_assets');
+                }
+
+                const payload = {
+                    title: document.getElementById('evt-title').value,
+                    description: document.getElementById('evt-desc').value,
+                    location: document.getElementById('evt-loc').value,
+                    event_date: document.getElementById('evt-date').value,
+                    map_url: document.getElementById('evt-map').value
+                };
+                if (url) payload.image_url = url;
+
+                let error;
+                if (id) {
+                    const { error: err } = await supabase.from('events').update(payload).eq('id', id);
+                    error = err;
+                } else {
+                    if (url) payload.image_url = url;
+                    const { error: err } = await supabase.from('events').insert([payload]);
+                    error = err;
+                }
+
+                if (!error) {
+                    alert(id ? 'Event Updated!' : 'Event Created!');
+                    resetEvtForm();
+                    loadEvents();
+                } else {
+                    alert('Error: ' + error.message);
+                }
+            } catch (err) {
+                alert('Unexpected error: ' + err.message);
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
         });
 
-        // Teacher
+        // --- TEACHERS ---
+        window.loadTeachers = async function () {
+            const { data } = await supabase.from('teachers').select('*');
+            document.getElementById('teachers-list').innerHTML = data.map(t => `
+                <div class="flex items-center space-x-4 p-4 border rounded-xl bg-white relative group">
+                    <button onclick="deleteItem('teachers', '${t.id}', 'loadTeachers')" class="absolute top-2 right-2 text-red-400 opacity-0 group-hover:opacity-100 transition text-xs">Remove</button>
+                    <img src="${t.photo_url || 'https://placehold.co/50'}" class="w-14 h-14 rounded-full object-cover shadow-sm">
+                    <div>
+                        <p class="font-bold text-slate-800">${t.name}</p>
+                        <p class="text-xs font-bold text-indigo-600 bg-indigo-50 inline-block px-2 py-0.5 rounded">${t.grade}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
         document.getElementById('teacher-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const file = document.getElementById('tea-file').files[0];
-            const imageUrl = await uploadFile(file, 'school_assets');
-
+            const url = await uploadFile(file, 'school_assets');
             const { error } = await supabase.from('teachers').insert([{
                 name: document.getElementById('tea-name').value,
                 grade: document.getElementById('tea-grade').value,
                 bio: document.getElementById('tea-bio').value,
-                photo_url: imageUrl
+                photo_url: url
             }]);
             if (!error) { alert('Teacher Added!'); e.target.reset(); loadTeachers(); }
         });
 
-        async function loadTeachers() {
-            const { data } = await supabase.from('teachers').select('*');
-            document.getElementById('teachers-list').innerHTML = data.map(t => `
-                <div class="flex items-center space-x-4 p-4 border rounded bg-gray-50">
-                    <img src="${t.photo_url || 'https://placehold.co/50'}" class="w-12 h-12 rounded-full object-cover">
-                    <div>
-                        <p class="font-bold">${t.name}</p>
-                        <p class="text-xs text-indigo-600">${t.grade}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // --- STUDENTS & PERFORMANCE ---
-        async function loadStudents() {
-            const { data } = await supabase.from('students').select('*, parent_requests(full_name)');
+        // --- STUDENTS & PARENTS ---
+        window.loadStudents = async function () {
+            const { data } = await supabase.from('students').select('*, parent_requests(full_name, phone_number, password)').order('created_at', { ascending: false }).limit(50);
             document.getElementById('student-list').innerHTML = data.map(s => `
-                <div class="flex justify-between items-center p-3 border rounded hover:bg-gray-50">
-                    <div>
-                        <p class="font-bold">${s.full_name}</p>
-                        <p class="text-sm text-gray-500">${s.grade} • Parent: ${s.parent_requests?.full_name || '?'}</p>
+                <div class="flex justify-between items-center p-4 bg-slate-50 rounded-xl hover:bg-white border border-transparent hover:border-slate-200 transition">
+                    <div class="flex items-center space-x-3">
+                        <img src="${s.photo_url || 'https://placehold.co/40'}" class="w-10 h-10 rounded-full object-cover border border-slate-200">
+                        <div>
+                            <p class="font-bold text-slate-800">${s.full_name}</p>
+                            <p class="text-sm text-slate-500">${s.grade} • ${s.parent_requests?.full_name || '?'}</p>
+                        </div>
                     </div>
-                    <div class="space-x-2">
-                        <button onclick="showQR('${s.id}', '${s.full_name}')" class="bg-gray-800 text-white text-xs px-2 py-1 rounded">QR</button>
-                        <button onclick="openPerfModal('${s.id}', '${s.full_name}')" class="bg-indigo-600 text-white text-xs px-2 py-1 rounded">Add Grade</button>
+                    <div class="flex items-center space-x-1">
+                        <button onclick="showQR('${s.id}', '${s.full_name}')" class="bg-slate-800 text-white p-2 rounded-lg hover:bg-slate-700" title="QR Code"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg></button>
+                        <button onclick="openPerfModal('${s.id}', '${s.full_name}')" class="bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700" title="Add Grade"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></button>
+                         <button onclick="editStudent('${s.id}')" class="bg-white border border-slate-200 text-slate-600 p-2 rounded-lg hover:bg-slate-50" title="Edit">✎</button>
+                        <button onclick="deleteItem('students', '${s.id}', 'loadStudents')" class="text-red-400 hover:text-red-600 p-2" title="Delete">✕</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Performance Modal
+        window.editStudent = async (id) => {
+            const { data } = await supabase.from('students').select('*, parent_requests(*)').eq('id', id).single();
+            if (data) {
+                document.getElementById('stu-id').value = data.id;
+                document.getElementById('stu-name').value = data.full_name;
+                document.getElementById('stu-grade').value = data.grade;
+                document.getElementById('stu-parent-phone').value = data.parent_requests?.phone_number || '';
+                document.getElementById('stu-submit-btn').textContent = 'Update Student';
+                document.getElementById('stu-cancel-btn').classList.remove('hidden');
+                document.getElementById('student-form').scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        window.resetStuForm = () => {
+            document.getElementById('student-form').reset();
+            document.getElementById('stu-id').value = '';
+            document.getElementById('stu-submit-btn').textContent = 'Register Student';
+            document.getElementById('stu-cancel-btn').classList.add('hidden');
+            document.getElementById('student-msg').textContent = '';
+        };
+
+        // Parent List (Restored & Improved)
+        window.loadParents = async () => {
+            try {
+                const { data, error } = await supabase.from('parent_requests').select('*').order('created_at', { ascending: false });
+
+                if (error) {
+                    console.error('Error fetching parents:', error);
+                    document.getElementById('parent-list').innerHTML = `<tr><td colspan="5" class="text-center text-red-500 py-4">Error: ${error.message}</td></tr>`;
+                    return;
+                }
+
+                if (!data || data.length === 0) {
+                    document.getElementById('parent-list').innerHTML = `<tr><td colspan="5" class="text-center text-slate-500 py-4">No parent accounts found.</td></tr>`;
+                    return;
+                }
+
+                document.getElementById('parent-list').innerHTML = data.map(p => `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="px-6 py-4 font-medium text-slate-800">${p.full_name}</td>
+                        <td class="px-6 py-4 text-slate-600">${p.phone_number}</td>
+                        <td class="px-6 py-4 font-mono text-xs text-slate-500">${p.password}</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 rounded-full text-xs font-bold ${p.is_approved ? 'bg-emerald-100 text-emerald-700' : 'bg-yellow-100 text-yellow-700'}">${p.is_approved ? 'Active' : 'Pending'}</span></td>
+                        <td class="px-6 py-4 space-x-2">
+                            ${!p.is_approved ? `<button onclick="approve('${p.id}')" class="text-indigo-600 font-bold hover:underline">Approve</button>` : ''}
+                            <button onclick="deleteItem('parent_requests', '${p.id}', 'loadParents')" class="text-red-500 hover:underline">Delete</button>
+                        </td>
+                    </tr>
+                 `).join('');
+            } catch (err) {
+                console.error('Unexpected error loading parents:', err);
+                document.getElementById('parent-list').innerHTML = `<tr><td colspan="5" class="text-center text-red-500 py-4">Unexpected Error: ${err.message}</td></tr>`;
+            }
+        };
+
+        window.approve = async (id) => {
+            try {
+                const { error } = await supabase.from('parent_requests').update({ is_approved: true }).eq('id', id);
+                if (error) throw error;
+                loadParents();
+            } catch (err) {
+                alert('Error approving: ' + err.message);
+            }
+        };
+
+        // Registration Logic (Refined)
+        document.getElementById('student-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('stu-submit-btn');
+            const originalText = btn.textContent;
+            btn.textContent = originalText.includes('Update') ? 'Updating...' : 'Registering...';
+            btn.disabled = true;
+
+            const msg = document.getElementById('student-msg');
+            msg.textContent = 'Processing...'; msg.className = 'text-indigo-500 mt-4';
+
+            const id = document.getElementById('stu-id').value;
+            const name = document.getElementById('stu-name').value;
+            const grade = document.getElementById('stu-grade').value;
+            const phone = document.getElementById('stu-parent-phone').value;
+            const file = document.getElementById('stu-file').files[0];
+
+            // Custom Parent Fields
+            const customName = document.getElementById('stu-parent-name').value;
+            const customPass = document.getElementById('stu-parent-pass').value || '123456';
+
+            try {
+                let pid;
+                const { data: existing } = await supabase.from('parent_requests').select('id').eq('phone_number', phone).single();
+
+                if (existing) {
+                    pid = existing.id;
+                } else {
+                    // Create New Parent with Custom Inputs Only if creating new, not on simple edit if parent exists
+                    const pName = customName || ('Parent of ' + name);
+                    const { data: New, error: pErr } = await supabase.from('parent_requests').insert([{
+                        full_name: pName,
+                        phone_number: phone,
+                        password: customPass,
+                        is_approved: true
+                    }]).select().single();
+
+                    if (pErr) throw pErr;
+                    pid = New.id;
+                }
+
+                let photoUrl = null;
+                if (file) {
+                    photoUrl = await uploadFile(file, 'school_assets');
+                }
+
+                const payload = { full_name: name, grade, parent_id: pid };
+                if (photoUrl) payload.photo_url = photoUrl;
+
+                if (id) {
+                    const { error: sErr } = await supabase.from('students').update(payload).eq('id', id);
+                    if (sErr) throw sErr;
+                    msg.textContent = 'Student Updated!';
+                } else {
+                    const { error: sErr } = await supabase.from('students').insert([payload]);
+                    if (sErr) throw sErr;
+                    msg.textContent = 'Student Registered!';
+                }
+
+                msg.className = 'text-emerald-600 mt-4';
+
+                if (!id) e.target.reset(); // Only reset if new registration
+                else resetStuForm();
+
+                loadStudents();
+                loadParents();
+            } catch (error) {
+                msg.textContent = error.message; msg.className = 'text-red-500 mt-4';
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // Modals
+        window.showQR = (id, name) => {
+            const c = document.getElementById('qrcode');
+            c.innerHTML = ''; // Clear previous
+            const url = `${window.location.origin}/student/card.html?id=${id}`;
+
+            // Generate QR
+            new QRCode(c, { text: url, width: 200, height: 200 });
+
+            document.getElementById('qr-modal-title').textContent = `ID: ${name}`;
+            document.getElementById('qr-modal').classList.remove('hidden');
+            document.getElementById('qr-modal').classList.add('flex');
+
+            // Setup buttons
+            window.currentQRUrl = url;
+            window.currentStudentName = name;
+        };
+
+        window.saveQR = () => {
+            const img = document.querySelector('#qrcode img');
+            if (img) {
+                const link = document.createElement('a');
+                link.href = img.src;
+                link.download = `QR-${window.currentStudentName}.png`;
+                link.click();
+            }
+        };
+
+        window.copyLink = () => {
+            if (window.currentQRUrl) {
+                navigator.clipboard.writeText(window.currentQRUrl).then(() => {
+                    alert('Link copied to clipboard!');
+                });
+            }
+        };
+
         window.openPerfModal = (id, name) => {
             document.getElementById('perf-stu-id').value = id;
             document.getElementById('perf-stu-name').textContent = name;
             document.getElementById('perf-modal').classList.remove('hidden');
             document.getElementById('perf-modal').classList.add('flex');
         };
-
         document.getElementById('perf-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const { error } = await supabase.from('performance').insert([{
@@ -348,46 +901,8 @@
                 score: document.getElementById('perf-score').value,
                 feedback: document.getElementById('perf-feedback').value
             }]);
-            if (!error) { alert('Saved!'); document.getElementById('perf-modal').classList.add('hidden'); e.target.reset(); }
+            if (!error) { alert('Report Saved'); document.getElementById('perf-modal').classList.add('hidden'); e.target.reset(); }
         });
-
-        // Register Logic (Same as before)
-        document.getElementById('student-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            // ... (Previous logic for auto-create parent) ...
-            // Re-implementing briefly for completeness in overwrite
-            const name = document.getElementById('stu-name').value;
-            const grade = document.getElementById('stu-grade').value;
-            const phone = document.getElementById('stu-parent-phone').value;
-
-            let pid;
-            const { data: existing } = await supabase.from('parent_requests').select('id').eq('phone_number', phone).single();
-            if (existing) pid = existing.id;
-            else {
-                const { data: New } = await supabase.from('parent_requests').insert([{ full_name: 'Parent of ' + name, phone_number: phone, password: '123456', is_approved: true }]).select().single();
-                pid = New.id;
-            }
-            await supabase.from('students').insert([{ full_name: name, grade, parent_id: pid }]);
-            alert('Registered!'); loadStudents(); e.target.reset();
-        });
-
-        // Parents List
-        window.loadParents = async () => {
-            const { data } = await supabase.from('parent_requests').select('*').order('created_at', { ascending: false });
-            document.getElementById('parent-list').innerHTML = data.map(p => `
-                <tr><td class="px-6 py-4">${p.full_name}</td><td class="px-6 py-4">${p.phone_number}</td>
-                <td class="px-6 py-4">${!p.is_approved ? `<button onclick="approve('${p.id}')" class="text-indigo-600 font-bold">Approve</button>` : 'Approved'}</td></tr>
-             `).join('');
-        };
-        window.approve = async (id) => { await supabase.from('parent_requests').update({ is_approved: true }).eq('id', id); loadParents(); };
-
-        window.showQR = (id, name) => {
-            const c = document.getElementById('qrcode'); c.innerHTML = '';
-            new QRCode(c, { text: `${window.location.origin}/student/card.html?id=${id}`, width: 200, height: 200 });
-            document.getElementById('qr-modal-title').textContent = `QR: ${name}`;
-            document.getElementById('qr-modal').classList.remove('hidden');
-            document.getElementById('qr-modal').classList.add('flex');
-        };
 
         // Init
         loadStats();

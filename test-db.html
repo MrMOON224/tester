@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Test - School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+        <h1 class="text-3xl font-bold mb-6">Database Connection Test</h1>
+
+        <div class="space-y-4">
+            <div>
+                <h2 class="text-xl font-semibold mb-2">Connection Status:</h2>
+                <p id="status" class="text-gray-600">Testing...</p>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-semibold mb-2">Announcements:</h2>
+                <div id="announcements" class="bg-gray-50 p-4 rounded"></div>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-semibold mb-2">Events:</h2>
+                <div id="events" class="bg-gray-50 p-4 rounded"></div>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-semibold mb-2">Raw Response:</h2>
+                <pre id="raw" class="bg-gray-900 text-green-400 p-4 rounded text-xs overflow-auto"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { supabase } from './assets/js/supabase-client.js';
+
+        async function testConnection() {
+            const statusEl = document.getElementById('status');
+            const annEl = document.getElementById('announcements');
+            const evtEl = document.getElementById('events');
+            const rawEl = document.getElementById('raw');
+
+            try {
+                statusEl.textContent = 'Connecting to Supabase...';
+                statusEl.className = 'text-blue-600';
+
+                // Test announcements
+                const { data: announcements, error: annError } = await supabase
+                    .from('announcements')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (annError) {
+                    annEl.innerHTML = `<p class="text-red-600">Error: ${annError.message}</p>`;
+                    rawEl.textContent = JSON.stringify({ error: annError }, null, 2);
+                } else {
+                    statusEl.textContent = '✅ Connected successfully!';
+                    statusEl.className = 'text-green-600 font-bold';
+
+                    if (announcements && announcements.length > 0) {
+                        annEl.innerHTML = announcements.map(a => `
+                            <div class="mb-2 p-2 bg-white rounded">
+                                <strong>${a.title}</strong><br>
+                                <small class="text-gray-500">${a.content}</small>
+                            </div>
+                        `).join('');
+                    } else {
+                        annEl.innerHTML = '<p class="text-gray-500">No announcements found</p>';
+                    }
+
+                    rawEl.textContent = JSON.stringify({ announcements }, null, 2);
+                }
+
+                // Test events
+                const { data: events, error: evtError } = await supabase
+                    .from('events')
+                    .select('*')
+                    .order('event_date', { ascending: true });
+
+                if (evtError) {
+                    evtEl.innerHTML = `<p class="text-red-600">Error: ${evtError.message}</p>`;
+                } else if (events && events.length > 0) {
+                    evtEl.innerHTML = events.map(e => `
+                        <div class="mb-2 p-2 bg-white rounded">
+                            <strong>${e.title}</strong> - ${e.event_date}<br>
+                            <small class="text-gray-500">${e.description || 'No description'}</small>
+                        </div>
+                    `).join('');
+                } else {
+                    evtEl.innerHTML = '<p class="text-gray-500">No events found</p>';
+                }
+
+            } catch (error) {
+                statusEl.textContent = '❌ Connection failed!';
+                statusEl.className = 'text-red-600 font-bold';
+                rawEl.textContent = JSON.stringify({ error: error.message }, null, 2);
+            }
+        }
+
+        testConnection();
+    </script>
+</body>
+
+</html>
